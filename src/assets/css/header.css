@@ -81,7 +81,7 @@ header a.nav-button {
   max-width: 100px;
 }
 
-header a.nav-button:hover {
+header a.nav-button:hover, header a.nav-button:focus-visible {
   background-color: var(--color-accent-transparent);
   transition: background-color var(--transition-time);
 }

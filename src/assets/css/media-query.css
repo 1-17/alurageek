@@ -22,6 +22,10 @@
     display: none;
   }
 
+  div.banner h2 {
+    font-size: var(--font-xl) !important;
+  }
+
   ul.products-list {
     grid-template-columns: repeat(4, 1fr) !important;
   }

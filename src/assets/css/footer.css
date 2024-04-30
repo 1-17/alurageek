@@ -1,0 +1,36 @@
+footer {
+  background-color: var(--color-tertiary);
+}
+
+footer .logo {
+  margin: 0 auto;
+}
+
+footer .logo a::before {
+  --icon-size: 40px;
+}
+
+footer div.menu-container {
+  background-color: var(--color-accent-transparent);
+}
+
+footer div.menu-container ul.store-links a {
+  line-height: 2rem;
+}
+
+footer div.first-column, footer div.container.credits {
+  text-align: center;
+}
+
+footer div.container.credits p {
+  margin: 0;
+}
+
+footer div.container.credits a {
+  font-weight: var(--font-bold);
+}
+
+footer div.container.credits a:hover {
+  color: var(--color-accent);
+  transition: color var(--transition-time);
+}

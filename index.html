@@ -31,20 +31,24 @@
   <link rel="stylesheet" href="src/assets/css/normalize.css">
   <link rel="stylesheet" href="src/assets/css/index.css">
   <link rel="stylesheet" href="src/assets/css/media-query.css">
+  <link rel="stylesheet" href="src/assets/css/logo.css">
+  <link rel="stylesheet" href="src/assets/css/button.css">
+  <link rel="stylesheet" href="src/assets/css/form.css">
   <link rel="stylesheet" href="src/assets/css/header.css">
+  <link rel="stylesheet" href="src/assets/css/footer.css">
   <!-- JavaScript -->
   <script type="module" src="src/js/index.js" defer></script>
 </head>
 <body>
   <header>
-    <nav class="container">
+    <nav class="container" aria-label="Header navigation">
       <div class="first-column">
-        <h1><a href="/"><span class="alura">Alura</span>Geek</a></h1>
+        <h1 class="logo"><a href="/"><span class="alura">Alura</span>Geek</a></h1>
         <form id="search_product" class="search hidden" aria-labelledby="search_input">
-          <input id="search_input" type="text" placeholder="What do you wish to find?" aria-label="Search product" autocomplete="off" aria-autocomplete="none">
+          <input id="search_input" type="text" placeholder="What to find?" aria-label="Search product" autocomplete="off" aria-autocomplete="none">
           <button type="submit" aria-labelledby="search_input">
             <svg width="24px" height="25px" viewBox="0 0 24 25" aria-label="Magnifying glass" xmlns="http://www.w3.org/2000/svg">
-              <path fill="#A2A2A2" d="M15.4999 14.5H14.7099L14.4299 14.23C15.6299 12.83 16.2499 10.92 15.9099 8.89002C15.4399 6.11002 13.1199 3.89002 10.3199 3.55002C6.08989 3.03002 2.52989 6.59001 3.04989 10.82C3.38989 13.62 5.60989 15.94 8.38989 16.41C10.4199 16.75 12.3299 16.13 13.7299 14.93L13.9999 15.21V16L18.2499 20.25C18.6599 20.66 19.3299 20.66 19.7399 20.25C20.1499 19.84 20.1499 19.17 19.7399 18.76L15.4999 14.5ZM9.49989 14.5C7.00989 14.5 4.99989 12.49 4.99989 10C4.99989 7.51002 7.00989 5.50002 9.49989 5.50002C11.9899 5.50002 13.9999 7.51002 13.9999 10C13.9999 12.49 11.9899 14.5 9.49989 14.5Z"></path>
+              <path fill="currentColor" d="M15.4999 14.5H14.7099L14.4299 14.23C15.6299 12.83 16.2499 10.92 15.9099 8.89002C15.4399 6.11002 13.1199 3.89002 10.3199 3.55002C6.08989 3.03002 2.52989 6.59001 3.04989 10.82C3.38989 13.62 5.60989 15.94 8.38989 16.41C10.4199 16.75 12.3299 16.13 13.7299 14.93L13.9999 15.21V16L18.2499 20.25C18.6599 20.66 19.3299 20.66 19.7399 20.25C20.1499 19.84 20.1499 19.17 19.7399 18.76L15.4999 14.5ZM9.49989 14.5C7.00989 14.5 4.99989 12.49 4.99989 10C4.99989 7.51002 7.00989 5.50002 9.49989 5.50002C11.9899 5.50002 13.9999 7.51002 13.9999 10C13.9999 12.49 11.9899 14.5 9.49989 14.5Z"></path>
             </svg>
           </button>
         </form>
@@ -60,5 +64,41 @@
       </button>
     </nav>
   </header>
+  <main class="container"></main>
+  <footer>
+    <div class="menu-container">
+      <nav class="container" aria-label="Footer navigation">
+        <div class="first-column">
+          <h2 class="logo"><a href="/"><span class="alura">Alura</span>Geek</a></h2>
+          <ul class="store-links" aria-label="Navigation">
+            <li><a href="/">About Us</a></li>
+            <li><a href="/">Privacy Policy</a></li>
+            <li><a href="/">Loyalty Program</a></li>
+            <li><a href="/">Our Stores</a></li>
+            <li><a href="/">Franchise Opportunities</a></li>
+            <li><a href="/">Advertise Here</a></li>
+          </ul>
+        </div>
+        <form aria-labelledby="contact_us">
+          <fieldset>
+            <legend id="contact_us">Contact Us</legend>
+            <div class="field-container" aria-labelledby="name_label">
+              <input id="name" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+              <label id="name_label" for="name">Name</label>
+            </div>
+            <div class="field-container" aria-labelledby="message_label">
+              <input id="message" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+              <label id="message_label" for="message">Write your message</label>
+            </div>
+            <button type="submit" class="button">Send message</button>
+          </fieldset>
+        </form>
+      </nav>
+    </div>
+    <div class="container credits" aria-label="Credits">
+      <p>Developed by <a href="https://github.com/1-17" target="_blank" rel="noopener noreferrer" aria-label="GitHub">117</a></p>
+      <span>2024</span>
+    </div>
+  </footer>
 </body>
 </html>

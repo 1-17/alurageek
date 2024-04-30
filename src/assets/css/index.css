@@ -1,38 +1,59 @@
 :root {
   --color-primary: rgb(70, 70, 70);
-  --color-secondary: rgb(229, 229, 229);
+  --color-primary-lighter: rgb(162, 162, 162);
+  --color-secondary: rgb(245, 245, 245);
   --color-tertiary: rgb(255, 255, 255);
   --color-accent: rgb(42, 122, 228);
+  --color-accent-lighter: rgb(85, 149, 233);
   --color-accent-transparent: rgb(42, 122, 228, 0.15);
   --font-primary: "Raleway", sans-serif;
+  --font-sm: 0.75rem;
+  --font-base: 1rem;
+  --font-regular: 400;
+  --font-bold: 700;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-base: 2rem;
   --transition-time: 0.25s;
-
   background-color: var(--color-secondary);
   color: var(--color-primary);
   font-family: var(--font-primary);
   font-optical-sizing: auto;
-  font-weight: 400;
+  font-weight: var(--font-regular);
   font-style: normal;
-  font-size: 0.75rem;
+  font-size: var(--font-sm);
 }
 
-:focus-visible {
-  outline: 2px solid currentColor;
+*:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
   outline-offset: 0;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 .container {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: var(--spacing-sm);
 }
 
 .hidden {
   display: none;
 }
 
-.button {
-  padding: 1rem 2rem;
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main.container {
+  flex-grow: 1;
+  width: 100%;
+  padding-top: var(--spacing-base);
+  padding-bottom: var(--spacing-base);
 }
 
 a {
@@ -47,7 +68,7 @@ button {
   cursor: pointer;
 }
 
-input {
-  background-color: transparent;
-  border: none;
+ol, ul {
+  list-style: none;
+  padding: 0;
 }

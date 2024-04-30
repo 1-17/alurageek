@@ -1,0 +1,10 @@
+.button {
+  background-color: var(--color-accent);
+  color: var(--color-secondary);
+  padding: 1rem 2rem;
+}
+
+.button:hover {
+  background-color: var(--color-accent-lighter);
+  transition: background-color var(--transition-time);
+}

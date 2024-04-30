@@ -1,0 +1,25 @@
+.logo {
+  white-space: nowrap;
+  width: fit-content;
+  margin: 0;
+}
+
+.logo a /* for focus square outline */ {
+  display: block;
+}
+
+.logo a::before {
+  --icon-size: 50px;
+  content: "";
+  background-image: url("../../../favicon.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+.logo a span.alura {
+  color: var(--color-accent);
+}

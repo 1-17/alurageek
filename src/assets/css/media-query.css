@@ -1,15 +1,16 @@
-@media screen and (min-width: 420px) {
-}
-
 @media screen and (min-width: 768px) {
-  header nav.container {
-    --gap-x: 2rem !important;
+  :root {
+    font-size: var(--font-base);
+  }
+  
+  .container {
+    padding: var(--spacing-base) var(--spacing-sm);
   }
 
   header .first-column {
     display: flex;
     align-items: center;
-    gap: var(--gap-x);
+    gap: var(--spacing-base);
     width: 60% !important;
   }
 
@@ -20,14 +21,35 @@
   header button.searchbar-toggler {
     display: none;
   }
+
+  footer nav.container {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-base);
+  }
+
+  footer div.first-column {
+    text-align: left !important;
+    width: 80%;
+  }
+
+  footer .logo {
+    margin: 0 !important;
+  }
+
+  footer ul.store-links {
+    margin-bottom: 0;
+  }
 }
 
 @media screen and (min-width: 1000px) {
-  :root {
-    font-size: 1rem;
+  footer div.first-column {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-base);
   }
-  
-  .container {
-    padding: 1.5rem 1rem;
+
+  footer ul.store-links {
+    margin: 0 auto;
   }
 }

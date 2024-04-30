@@ -55,6 +55,10 @@
     grid-template-columns: repeat(6, 1fr) !important;
   }
 
+  ul.products-list li:nth-last-child(-n + 2) {
+    display: initial !important;
+  }
+
   footer div.first-column {
     display: flex;
     justify-content: space-between;

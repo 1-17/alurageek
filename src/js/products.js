@@ -3,7 +3,7 @@ const products = {
   get: undefined,
   set: undefined,
   remove: undefined,
-  render: undefined
+  renderByCategory: undefined
 }
 
 const productsData = localStorage.getItem(products._key)
@@ -39,7 +39,7 @@ products.remove = (productId) => {
   localStorage.setItem(products._key, JSON.stringify(newList))
 }
 
-products.render = () => {
+products.renderByCategory = () => {
   const parentElement = document.querySelector("main")
 
   if (productsList && productsList.length > 0) {
@@ -48,24 +48,29 @@ products.render = () => {
     for (const [category, products] of Object.entries(productsByCategory)) {
       if (productsByCategory[category].length > 0) {
         const categoryId = category.toLowerCase().replace(" ", "-")
+        const maxProducts = 6
 
         parentElement.innerHTML += `
           <section aria-label="${category} products">
             <div class="products-header">
               <h2 class="products-category">${category}</h2>
-              <a href="/products/${categoryId}.html" class="products-link see-all">See all</a>
+              <a href="/products/${categoryId}.html" class="see-all">See all</a>
             </div>
             <ul class="products-list" aria-label="Products">
-              ${
-                products.map(product => `
-                  <li>
-                    <img src="${product.image}" alt="${product.name}" role="img">
-                    <span>${product.name}</span>
-                    <span class="price" role="none">${product.price}</span>
-                    <a href="/product/${product.id}" class="products-link">See product</a>
-                  </li>
-                `).join("")
-              }
+              ${products.map((product, i) => {
+                if (i < maxProducts) {
+                  return `
+                    <li>
+                      <a href="/product/${product.id}">
+                        <img src="${product.image}" alt="${product.name}" role="img">
+                        <span>${product.name}</span>
+                        <span class="price" role="none">${product.price}</span>
+                        <span class="see-product">See product</span>
+                      </a>
+                    </li>
+                  `
+                }
+              }).join("")}
             </ul>
           </section>
         `

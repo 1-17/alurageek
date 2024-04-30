@@ -1,0 +1,52 @@
+:root {
+  --color-primary: rgb(70, 70, 70);
+  --color-secondary: rgb(229, 229, 229);
+  --color-tertiary: rgb(255, 255, 255);
+  --color-accent: rgb(42, 122, 228);
+  --color-accent-transparent: rgb(42, 122, 228, 0.15);
+  --font-primary: "Raleway", sans-serif;
+  --transition-time: 0.25s;
+
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  font-family: var(--font-primary);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.75rem;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.button {
+  padding: 1rem 2rem;
+}
+
+a {
+  color: currentColor;
+  text-decoration: none;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  color: currentColor;
+  cursor: pointer;
+}
+
+input {
+  background-color: transparent;
+  border: none;
+}

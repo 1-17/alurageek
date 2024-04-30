@@ -1,0 +1,33 @@
+@media screen and (min-width: 420px) {
+}
+
+@media screen and (min-width: 768px) {
+  header nav.container {
+    --gap-x: 2rem !important;
+  }
+
+  header .first-column {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-x);
+    width: 60% !important;
+  }
+
+  header form.search, header a.nav-button {
+    display: initial !important;
+  }
+
+  header button.searchbar-toggler {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  :root {
+    font-size: 1rem;
+  }
+  
+  .container {
+    padding: 1.5rem 1rem;
+  }
+}

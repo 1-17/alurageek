@@ -1,0 +1,95 @@
+header {
+  background-color: var(--color-tertiary);
+}
+
+header nav.container {
+  --gap-x: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem var(--gap-x);
+}
+
+header .first-column {
+  width: 100%;
+}
+
+header h1 {
+  white-space: nowrap;
+  margin: 0;
+}
+
+header h1 a {
+  display: block;
+  width: fit-content;
+}
+
+header h1 a::before {
+  --icon-size: 50px;
+  content: "";
+  background-image: url("../../../favicon.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+header h1 a span.alura {
+  color: var(--color-accent);
+}
+
+header form.search {
+  --round-shape: 1rem;
+  position: relative;
+  width: 100%;
+}
+
+header form.search input {
+  --padding-x-l: 1rem;
+  --padding-x-r: 2.5rem;
+  --padding-y: 0.5rem;
+  background-color: var(--color-secondary);
+  border-radius: var(--round-shape);
+  width: calc(100% - (var(--padding-x-l) + var(--padding-x-r)));
+  padding: var(--padding-y) var(--padding-x-r) var(--padding-y) var(--padding-x-l);
+}
+
+header form.search button {
+  border-radius: var(--round-shape);
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+
+header form.search button svg {
+  height: 100%;
+}
+
+header form.search button:hover svg path, header form.search button:focus-visible svg path {
+  fill: currentColor;
+  transition: fill var(--transition-time);
+}
+
+header a.nav-button {
+  border: 1px solid currentColor;
+  color: var(--color-accent);
+  text-align: center;
+  width: 100%;
+  max-width: 100px;
+}
+
+header a.nav-button:hover {
+  background-color: var(--color-accent-transparent);
+  transition: background-color var(--transition-time);
+}
+
+header button.searchbar-toggler[aria-label="Close search products bar"] {
+  align-self: self-end;
+}
+
+header button.searchbar-toggler[aria-label="Close search products bar"] svg {
+  vertical-align: text-bottom;
+}

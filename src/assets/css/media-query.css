@@ -22,6 +22,10 @@
     display: none;
   }
 
+  ul.products-list {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+
   footer nav.container {
     display: flex;
     justify-content: space-between;
@@ -43,6 +47,10 @@
 }
 
 @media screen and (min-width: 1000px) {
+  ul.products-list {
+    grid-template-columns: repeat(6, 1fr) !important;
+  }
+
   footer div.first-column {
     display: flex;
     justify-content: space-between;

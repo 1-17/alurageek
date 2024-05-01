@@ -117,7 +117,7 @@ products.renderSuggestions = () => {
           <img src="${product.image}" alt="${product.name}" role="img">
           <div class="info-container">
             <h2 class="name">${product.name}</h2>
-            <span class="price">${product.price}</span>
+            <span class="price" role="none">${product.price}</span>
             <p class="description">${product.description}</p>
           </div>
         </section>

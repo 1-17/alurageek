@@ -12,6 +12,7 @@
   --font-lg: 2rem;
   --font-xl: 3rem;
   --font-regular: 400;
+  --font-semibold: 600;
   --font-bold: 700;
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
@@ -52,6 +53,7 @@ body {
 }
 
 main.container {
+  position: relative;
   flex-grow: 1;
   width: 100%;
   padding-top: var(--spacing-base);

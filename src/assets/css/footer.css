@@ -22,6 +22,11 @@ footer div.first-column, footer div.container.credits {
   text-align: center;
 }
 
+footer div.container.credits {
+  padding-top: var(--spacing-base);
+  padding-bottom: var(--spacing-base);
+}
+
 footer div.container.credits p {
   margin: 0;
 }

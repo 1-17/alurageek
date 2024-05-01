@@ -4,10 +4,12 @@ const products = {
   get: undefined,
   set: undefined,
   remove: undefined,
-  renderByCategory: undefined
+  renderByCategory: undefined,
+  renderSuggestions: undefined
 }
 
 let parentRenderElement = document.querySelector("main")
+const maxProductsPerRow = 6
 
 products._renderFallbackComponent = (message) => {
   if (!message || message.trim() === "") {
@@ -64,7 +66,6 @@ products.renderByCategory = () => {
     for (const [category, products] of Object.entries(productsByCategory)) {
       if (productsByCategory[category].length > 0) {
         const categoryId = category.toLowerCase().replace(" ", "-")
-        const maxProducts = 6
 
         parentRenderElement.innerHTML += `
           <section aria-label="${category} products">
@@ -74,10 +75,10 @@ products.renderByCategory = () => {
             </div>
             <ul class="products-list" aria-label="Products">
               ${products.map((product, i) => {
-                if (i < maxProducts) {
+                if (i < maxProductsPerRow) {
                   return `
                     <li>
-                      <a href="/product/${product.id}">
+                      <a href="/product.html?id=${product.id}">
                         <img src="${product.image}" alt="${product.name}" role="img">
                         <span>${product.name}</span>
                         <span class="price" role="none">${product.price}</span>
@@ -96,6 +97,47 @@ products.renderByCategory = () => {
   }
 
   products._renderFallbackComponent("No products to show yet.")
+}
+
+products.renderSuggestions = () => {
+  const urlId = String(parseInt(window.location.href.split("=")[1]))
+
+  parentRenderElement.innerHTML += `
+    <section class="similar-products" aria-labelledby="similar_products">
+      <h2 id="similar_products">Similar Products</h2>
+      <ul id="products_list" class="products-list" aria-labelledby="similar_products"></ul>
+    </section>
+  `
+  const listElement = document.querySelector("ul#products_list")
+
+  productsList.map((product, i) => {
+    if (product.id === urlId) {
+      parentRenderElement.firstElementChild.insertAdjacentHTML("beforebegin", `
+        <section class="product-details" aria-label="${product.name}">
+          <img src="${product.image}" alt="${product.name}" role="img">
+          <div class="info-container">
+            <h2 class="name">${product.name}</h2>
+            <span class="price">${product.price}</span>
+            <p class="description">${product.description}</p>
+          </div>
+        </section>
+      `)
+      return
+    }
+
+    if (i < maxProductsPerRow) {
+      listElement.innerHTML += `
+        <li>
+          <a href="/product.html?id=${product.id}">
+            <img src="${product.image}" alt="${product.name}" role="img">
+            <span>${product.name}</span>
+            <span class="price" role="none">${product.price}</span>
+            <span class="see-product">See product</span>
+          </a>
+        </li>
+      `
+    }
+  }).join("")
 }
 
 export default products

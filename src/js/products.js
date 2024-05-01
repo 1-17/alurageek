@@ -1,22 +1,40 @@
 const products = {
   _key: "products",
+  _renderFallbackComponent: undefined,
   get: undefined,
   set: undefined,
   remove: undefined,
   renderByCategory: undefined
 }
 
-const productsData = localStorage.getItem(products._key)
+let parentRenderElement = document.querySelector("main")
+
+products._renderFallbackComponent = (message) => {
+  if (!message || message.trim() === "") {
+    throw new Error("Render Fallback Component: Missing message.")
+  }
+
+  parentRenderElement.innerHTML = `<p class="products-list-fallback">${message}</p>`
+}
 
 products.get = () => {
+  const productsData = localStorage.getItem(products._key)
+
   if (!productsData) {
     fetch("src/products.json")
       .then(res => res.json())
       .then(res => localStorage.setItem(products._key, JSON.stringify(res)))
-      .catch(err => console.error(err))
+      .catch(err => {
+        console.error(err)
+        products._renderFallbackComponent("Failed to get posts list. Please, try again later.")
+      })
   }
-  
-  return JSON.parse(productsData).sort((a, b) => parseInt(b.id) - parseInt(a.id))
+
+  const list = JSON.parse(productsData)
+
+  if (list) {
+    return list.sort((a, b) => parseInt(b.id) - parseInt(a.id))
+  }
 }
 
 const productsList = products.get()
@@ -40,8 +58,6 @@ products.remove = (productId) => {
 }
 
 products.renderByCategory = () => {
-  const parentElement = document.querySelector("main")
-
   if (productsList && productsList.length > 0) {
     const productsByCategory = Object.groupBy(productsList, ({ category }) => category)
 
@@ -50,7 +66,7 @@ products.renderByCategory = () => {
         const categoryId = category.toLowerCase().replace(" ", "-")
         const maxProducts = 6
 
-        parentElement.innerHTML += `
+        parentRenderElement.innerHTML += `
           <section aria-label="${category} products">
             <div class="products-header">
               <h2 class="products-category">${category}</h2>
@@ -76,7 +92,10 @@ products.renderByCategory = () => {
         `
       }
     }
+    return
   }
+
+  products._renderFallbackComponent("No products to show yet.")
 }
 
 export default products

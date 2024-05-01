@@ -25,6 +25,7 @@
   font-weight: var(--font-regular);
   font-style: normal;
   font-size: var(--font-sm);
+  scroll-behavior: smooth;
 }
 
 *:focus-visible {

@@ -1,18 +1,23 @@
 form {
   --field-border-size: 2px;
-  --field-padding-x: 0.5rem;
+  --field-padding-x: 0.75rem;
   --field-padding-y: 0.5rem;
   width: 100%;
 }
 
 form.login {
   max-width: 320px;
-  margin: 0 auto;
+  margin: var(--spacing-base) auto;
 }
 
 form.login legend {
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: var(--spacing-sm);
+}
+
+form.add-new-product legend {
+  font-size: var(--font-lg);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -35,7 +40,7 @@ div.field-container:not(:first-of-type) {
   margin-top: var(--spacing-xs);
 }
 
-label, input::placeholder {
+label {
   color: var(--color-primary-lighter);
 }
 
@@ -46,31 +51,37 @@ label {
   transform: translateY(-50%);
 }
 
-input {
+input, textarea {
   background-color: var(--color-tertiary);
   border: none;
   width: 100%;
   padding: var(--field-padding-y) var(--field-padding-x);
 }
 
-input::placeholder {
-  opacity: 1;
+textarea {
+  resize: none;
 }
 
-input:not(header input) {
+textarea + label {
+  top: 25%;
+}
+
+input:not(header input), textarea {
   border-bottom: var(--field-border-size) solid var(--color-primary-lighter);
   border-radius: 5px;
   padding-top: calc(var(--field-padding-y) * 3);
 }
 
-input:focus-visible:not(header input) {
+input:focus-visible:not(header input), textarea:focus-visible {
   outline: none !important;
   border-bottom-color: var(--color-accent);
   transition: border-bottom-color var(--transition-time);
 }
 
 input:focus-visible + label,
-input:not(:placeholder-shown) + label {
+input:not(:placeholder-shown) + label,
+textarea:focus-visible + label,
+textarea:not(:placeholder-shown) + label {
   font-size: var(--font-sm);
   top: calc((var(--field-padding-y) * 2) - var(--field-border-size));
   transition: top var(--transition-time);

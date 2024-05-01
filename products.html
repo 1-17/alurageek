@@ -36,11 +36,8 @@
   <link rel="stylesheet" href="src/assets/css/form.css">
   <link rel="stylesheet" href="src/assets/css/header.css">
   <link rel="stylesheet" href="src/assets/css/footer.css">
-  <link rel="stylesheet" href="src/assets/css/banner.css">
-  <link rel="stylesheet" href="src/assets/css/products-list.css">
   <!-- JavaScript -->
   <script type="module" src="src/js/index.js" defer></script>
-  <script type="module" src="src/js/pages/home.js" defer></script>
 </head>
 <body>
   <header>
@@ -56,7 +53,7 @@
           </button>
         </form>
       </div>
-      <a id="nav_button" href="/login.html" class="button nav-button" role="button">Login</a>
+      <a id="nav_button" href="/products.html" class="button nav-button" role="button">Admin Menu</a>
       <button id="searchbar_toggler" type="button" class="searchbar-toggler" aria-label="Open search products bar">
         <svg width="24px" height="25px" viewBox="0 0 24 25" aria-label="Magnifying glass" aria-hidden="false" xmlns="http://www.w3.org/2000/svg">
           <path fill="currentColor" d="M15.4999 14.5H14.7099L14.4299 14.23C15.6299 12.83 16.2499 10.92 15.9099 8.89002C15.4399 6.11002 13.1199 3.89002 10.3199 3.55002C6.08989 3.03002 2.52989 6.59001 3.04989 10.82C3.38989 13.62 5.60989 15.94 8.38989 16.41C10.4199 16.75 12.3299 16.13 13.7299 14.93L13.9999 15.21V16L18.2499 20.25C18.6599 20.66 19.3299 20.66 19.7399 20.25C20.1499 19.84 20.1499 19.17 19.7399 18.76L15.4999 14.5ZM9.49989 14.5C7.00989 14.5 4.99989 12.49 4.99989 10C4.99989 7.51002 7.00989 5.50002 9.49989 5.50002C11.9899 5.50002 13.9999 7.51002 13.9999 10C13.9999 12.49 11.9899 14.5 9.49989 14.5Z"></path>
@@ -67,14 +64,34 @@
       </button>
     </nav>
   </header>
-  <div class="banner" aria-label="Banner">
-    <div class="container" role="none">
-      <h2>Promotional December</h2>
-      <p>Selected products with 33% off</p>
-      <a href="#consoles" class="button" role="button">See Consoles</a>
-    </div>
-  </div>
-  <main class="container"></main>
+  <main class="container">
+    <form class="add-new-product" aria-labelledby="add_new_product">
+      <fieldset>
+        <legend id="add_new_product">Add new product</legend>
+        <div class="field-container" aria-labelledby="image_label">
+          <input id="image" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <label id="image_label" for="image">Product image URL</label>
+        </div>
+        <div class="field-container" aria-labelledby="category_label">
+          <input id="category" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <label id="category_label" for="category">Product category</label>
+        </div>
+        <div class="field-container" aria-labelledby="name_label">
+          <input id="name" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <label id="name_label" for="name">Product name</label>
+        </div>
+        <div class="field-container" aria-labelledby="price_label">
+          <input id="price" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <label id="price_label" for="price">Product price</label>
+        </div>
+        <div class="field-container" aria-labelledby="description_label">
+          <textarea id="description" cols="10" rows="2" placeholder="" autocomplete="off" aria-autocomplete="none"></textarea>
+          <label id="description_label" for="description">Product description</label>
+        </div>
+        <button type="submit" class="button">Add product</button>
+      </fieldset>
+    </form>
+  </main>
   <footer>
     <div class="menu-container">
       <nav class="container" aria-label="Footer navigation">

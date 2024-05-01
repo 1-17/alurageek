@@ -96,6 +96,11 @@
     font-size: var(--font-xl) !important;
   }
 
+  form.add-new-product {
+    max-width: 600px;
+    margin: var(--spacing-base) auto;
+  }
+
   footer div.first-column {
     display: flex;
     justify-content: space-between;

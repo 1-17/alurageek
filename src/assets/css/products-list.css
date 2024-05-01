@@ -43,8 +43,28 @@ ul.products-list {
   gap: var(--spacing-sm);
 }
 
-ul.products-list li:nth-child(5), ul.products-list li:nth-child(6) {
+ul.products-list:not(ul.all-products) li:nth-child(5),
+ul.products-list:not(ul.all-products) li:nth-child(6) {
   display: none;
+}
+
+ul.products-list.all-products li {
+  position: relative;
+}
+
+ul.products-list.all-products div.buttons-container {
+  --offset: 10px;
+  position: absolute;
+  top: var(--offset);
+  right: var(--offset);
+}
+
+ul.products-list.all-products div.buttons-container button:not(:first-child) {
+  margin-left: var(--spacing-sm);
+}
+
+ul.products-list.all-products div.buttons-container button path {
+  fill: var(--color-tertiary)
 }
 
 ul.products-list a /* for focus outline */ {

@@ -88,15 +88,20 @@
     grid-template-columns: repeat(6, 1fr) !important;
   }
 
-  ul.products-list li:nth-child(5), ul.products-list li:nth-child(6) {
+  ul.products-list:not(ul.all-products) li:nth-child(5),
+  ul.products-list:not(ul.all-products) li:nth-child(6) {
     display: initial !important;
+  }
+
+  ul.products-list.all-products {
+    gap: var(--spacing-base) var(--spacing-sm);
   }
 
   section.product-details h2.name {
     font-size: var(--font-xl) !important;
   }
 
-  form.add-new-product {
+  form.add-product {
     max-width: 600px;
     margin: var(--spacing-base) auto;
   }

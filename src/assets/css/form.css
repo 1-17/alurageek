@@ -16,7 +16,7 @@ form.login legend {
   margin-bottom: var(--spacing-sm);
 }
 
-form.add-new-product legend {
+form.add-product legend {
   font-size: var(--font-lg);
   margin-bottom: var(--spacing-sm);
 }

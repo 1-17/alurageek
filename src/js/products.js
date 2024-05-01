@@ -5,7 +5,7 @@ const products = {
   set: undefined,
   remove: undefined,
   renderByCategory: undefined,
-  renderSuggestions: undefined
+  renderProductAndSuggestions: undefined
 }
 
 let parentRenderElement = document.querySelector("main")
@@ -99,7 +99,8 @@ products.renderByCategory = () => {
   products._renderFallbackComponent("No products to show yet.")
 }
 
-products.renderSuggestions = () => {
+products.renderProductAndSuggestions = () => {
+  let pageTitle
   const urlId = String(parseInt(window.location.href.split("=")[1]))
 
   parentRenderElement.innerHTML += `
@@ -112,6 +113,8 @@ products.renderSuggestions = () => {
 
   productsList.map((product, i) => {
     if (product.id === urlId) {
+      pageTitle = ` | ${product.name}`
+
       parentRenderElement.firstElementChild.insertAdjacentHTML("beforebegin", `
         <section class="product-details" aria-label="${product.name}">
           <img src="${product.image}" alt="${product.name}" role="img">
@@ -138,6 +141,9 @@ products.renderSuggestions = () => {
       `
     }
   }).join("")
+
+  document.querySelector("title").textContent += pageTitle
+  document.querySelectorAll("[name='title']").forEach(property => property.content += pageTitle)
 }
 
 export default products

@@ -1,8 +1,19 @@
 form {
-  --field-border-size: 3px;
+  --field-border-size: 2px;
   --field-padding-x: 0.5rem;
   --field-padding-y: 0.5rem;
   width: 100%;
+}
+
+form.login {
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+form.login legend {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: var(--spacing-sm);
 }
 
 fieldset {
@@ -47,14 +58,14 @@ input::placeholder {
 }
 
 input:not(header input) {
-  border-bottom: var(--field-border-size) solid var(--color-secondary);
+  border-bottom: var(--field-border-size) solid var(--color-primary-lighter);
   border-radius: 5px;
   padding-top: calc(var(--field-padding-y) * 3);
 }
 
 input:focus-visible:not(header input) {
   outline: none !important;
-  border-bottom-color: var(--color-primary-lighter);
+  border-bottom-color: var(--color-accent);
   transition: border-bottom-color var(--transition-time);
 }
 

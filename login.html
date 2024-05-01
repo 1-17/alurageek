@@ -63,7 +63,22 @@
       </button>
     </nav>
   </header>
-  <main class="container"></main>
+  <main class="container">
+    <form class="login" aria-labelledby="login">
+      <fieldset>
+        <legend id="login">Login</legend>
+        <div class="field-container" aria-labelledby="email_label">
+          <input id="email" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <label id="email_label" for="email">Write your email</label>
+        </div>
+        <div class="field-container" aria-labelledby="password_label">
+          <input id="password" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <label id="password_label" for="password">Write your password</label>
+        </div>
+        <button type="submit" class="button">Login</button>
+      </fieldset>
+    </form>
+  </main>
   <footer>
     <div class="menu-container">
       <nav class="container" aria-label="Footer navigation">

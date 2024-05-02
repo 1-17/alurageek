@@ -50,9 +50,6 @@ header a.nav-button {
   background-color: transparent;
   border: 1px solid currentColor;
   color: var(--color-accent);
-  text-align: center;
-  width: 100%;
-  max-width: 200px;
 }
 
 header a.nav-button:hover, header a.nav-button:focus-visible {

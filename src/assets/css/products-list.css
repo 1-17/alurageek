@@ -37,6 +37,11 @@ a.see-all:hover::after {
   transition: background-image var(--transition-time);
 }
 
+/* div.products-header a.button {
+  width: 180px;
+  text-align: center;
+} */
+
 ul.products-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

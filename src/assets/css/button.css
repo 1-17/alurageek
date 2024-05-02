@@ -1,7 +1,9 @@
 .button {
   background-color: var(--color-accent);
   color: var(--color-secondary);
+  text-align: center;
   padding: 1rem 2rem;
+  width: 180px;
 }
 
 .button:hover {

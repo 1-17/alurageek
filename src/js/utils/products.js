@@ -20,7 +20,7 @@ products._renderFallbackComponent = (message) => {
     throw new Error("Render Fallback Component: Missing message.")
   }
 
-  renderContainer.innerHTML = `<p class="products-list-fallback">${message}</p>`
+  renderContainer.innerHTML += `<p class="products-list-fallback">${message}</p>`
 }
 
 products._get = () => {

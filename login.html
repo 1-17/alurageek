@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AluraGeek | Login</title>
+  <script src="src/js/utils/redirect.js"></script>
   <meta name="description" content="AluraGeek is a fictional online store with a variety of merchandise inspired by pop culture, including sci-fi, fantasy, gaming, and more items.">
   <meta name="keywords" content="alurageek, online store, geek, merchandise, pop culture, sci-fi, fantasy, gaming, fictional">
   <meta name="author" content="117">
@@ -38,6 +39,7 @@
   <link rel="stylesheet" href="src/assets/css/footer.css">
   <!-- JavaScript -->
   <script type="module" src="src/js/index.js" defer></script>
+  <script type="module" src="src/js/pages/login.js" defer></script>
 </head>
 <body>
   <header>
@@ -64,15 +66,15 @@
     </nav>
   </header>
   <main class="container">
-    <form class="login" aria-labelledby="login">
+    <form id="login" class="login" aria-labelledby="login">
       <fieldset>
         <legend id="login">Login</legend>
         <div class="field-container" aria-labelledby="email_label">
-          <input id="email" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <input id="email" name="email" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
           <label id="email_label" for="email">Write your email</label>
         </div>
         <div class="field-container" aria-labelledby="password_label">
-          <input id="password" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <input id="password" name="password" type="password" placeholder="" autocomplete="off" aria-autocomplete="none">
           <label id="password_label" for="password">Write your password</label>
         </div>
         <button type="submit" class="button">Login</button>

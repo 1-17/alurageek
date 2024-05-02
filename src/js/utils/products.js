@@ -1,8 +1,10 @@
+import formData from "./formData.js"
+
 const products = {
   _key: "products",
   _renderFallbackComponent: undefined,
-  get: undefined,
-  set: undefined,
+  _get: undefined,
+  add: undefined,
   edit: undefined,
   delete: undefined,
   renderByCategory: undefined,
@@ -10,7 +12,7 @@ const products = {
   renderAll: undefined
 }
 
-let parentRenderElement = document.querySelector("main")
+const renderContainer = document.querySelector("main")
 const maxProductsPerRow = 6
 
 products._renderFallbackComponent = (message) => {
@@ -18,20 +20,17 @@ products._renderFallbackComponent = (message) => {
     throw new Error("Render Fallback Component: Missing message.")
   }
 
-  parentRenderElement.innerHTML = `<p class="products-list-fallback">${message}</p>`
+  renderContainer.innerHTML = `<p class="products-list-fallback">${message}</p>`
 }
 
-products.get = () => {
+products._get = () => {
   const productsData = localStorage.getItem(products._key)
 
   if (!productsData) {
-    fetch("src/products.json")
+    fetch("products.json")
       .then(res => res.json())
-      .then(res => localStorage.setItem(products._key, JSON.stringify(res)))
-      .catch(err => {
-        console.error(err)
-        products._renderFallbackComponent("Failed to get posts list. Please, try again later.")
-      })
+      .then(list => localStorage.setItem(products._key, JSON.stringify(list)))
+      .catch(() => products._renderFallbackComponent("Failed to get posts list. Please, try again later."))
   }
 
   const list = JSON.parse(productsData)
@@ -41,24 +40,26 @@ products.get = () => {
   }
 }
 
-const productsList = products.get()
+const productsList = products._get()
 
-products.set = () => {
-  const newItem = {
-    "id": "4",
-    "name": "Product IV",
-    "image": "https://i.ytimg.com/vi/hUE6Haw_3zg/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCoKZLqgIojU6sqxPnZydABdpSZ-A",
-    "category": "Test",
-    "description": "Product IV",
-    "price": "100.00"
+products.add = (e) => {
+  let newId = Math.max(...productsList.map(product => product.id)) + 1
+
+  const newProduct = {
+    id: newId,
+    ...formData(e)
   }
 
-  localStorage.setItem(products._key, JSON.stringify([...productsList, newItem]))
+  localStorage.setItem(products._key, JSON.stringify([newProduct, ...productsList]))
+  window.location.href = "/products.html"
 }
 
+products.edit = (productId) => console.log(Number(productId))
+
 products.delete = (productId) => {
-  const newList = productsList.filter(product => product.id !== productId)
+  const newList = productsList.filter(product => product.id !== Number(productId))
   localStorage.setItem(products._key, JSON.stringify(newList))
+  window.location.href = "/products.html"
 }
 
 products.renderByCategory = () => {
@@ -69,7 +70,7 @@ products.renderByCategory = () => {
       if (productsByCategory[category].length > 0) {
         const categoryId = category.toLowerCase().replace(" ", "-")
 
-        parentRenderElement.innerHTML += `
+        renderContainer.innerHTML += `
           <section id="${categoryId}" aria-label="${category} products">
             <div class="products-header">
               <h2 class="products-category">${category}</h2>
@@ -103,14 +104,14 @@ products.renderByCategory = () => {
 
 products.renderProductAndSuggestions = () => {
   let pageTitle = ""
-  const urlId = new URLSearchParams(window.location.search).get("id")
+  const productId = Number(new URLSearchParams(window.location.search).get("id"))
 
-  if (!urlId || !productsList.find(product => product.id === urlId)) {
+  if (!productId || !productsList.find(product => product.id === productId)) {
     products._renderFallbackComponent("Product not found.")
   }
 
   if (productsList && productsList.length > 1) {
-    parentRenderElement.innerHTML += `
+    renderContainer.innerHTML += `
       <section class="similar-products" aria-labelledby="similar_products">
         <h2 id="similar_products">Similar Products</h2>
         <ul id="products_list" class="products-list" aria-labelledby="similar_products"></ul>
@@ -121,10 +122,10 @@ products.renderProductAndSuggestions = () => {
   const listElement = document.querySelector("ul#products_list")
 
   productsList.map((product, i) => {
-    if (product.id === urlId) {
+    if (product.id === productId) {
       pageTitle = ` | ${product.name}`
 
-      parentRenderElement.insertAdjacentHTML("afterbegin", `
+      renderContainer.insertAdjacentHTML("afterbegin", `
         <section class="product-details" aria-label="${product.name}">
           <img src="${product.image}" alt="${product.name}" role="img">
           <div class="info-container">
@@ -159,7 +160,7 @@ products.renderProductAndSuggestions = () => {
 
 products.renderAll = () => {
   if (productsList && productsList.length > 0) {
-    parentRenderElement.innerHTML += `
+    renderContainer.innerHTML += `
       <ul class="products-list all-products" aria-label="Products">
         ${productsList.map(product => `
           <li aria-label="${product.name}">

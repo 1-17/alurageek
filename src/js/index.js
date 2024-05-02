@@ -1,3 +1,3 @@
-import searchbar from "./searchbar.js"
+import searchbar from "./utils/searchbar.js"
 
 document.addEventListener("DOMContentLoaded", searchbar)

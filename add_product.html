@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AluraGeek | Add Product</title>
+  <script src="src/js/utils/redirect.js"></script>
   <meta name="description" content="AluraGeek is a fictional online store with a variety of merchandise inspired by pop culture, including sci-fi, fantasy, gaming, and more items.">
   <meta name="keywords" content="alurageek, online store, geek, merchandise, pop culture, sci-fi, fantasy, gaming, fictional">
   <meta name="author" content="117">
@@ -38,6 +39,7 @@
   <link rel="stylesheet" href="src/assets/css/footer.css">
   <!-- JavaScript -->
   <script type="module" src="src/js/index.js" defer></script>
+  <script type="module" src="src/js/pages/addProduct.js" defer></script>
 </head>
 <body>
   <header>
@@ -65,27 +67,27 @@
     </nav>
   </header>
   <main class="container">
-    <form class="add-product" aria-labelledby="add_new_product">
+    <form id="add_product" class="add-product" aria-labelledby="add_new_product">
       <fieldset>
         <legend id="add_new_product">Add new product</legend>
         <div class="field-container" aria-labelledby="image_label">
-          <input id="image" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <input id="image" name="image" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
           <label id="image_label" for="image">Product image URL</label>
         </div>
         <div class="field-container" aria-labelledby="category_label">
-          <input id="category" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <input id="category" name="category" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
           <label id="category_label" for="category">Product category</label>
         </div>
         <div class="field-container" aria-labelledby="name_label">
-          <input id="name" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <input id="name" name="name" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
           <label id="name_label" for="name">Product name</label>
         </div>
         <div class="field-container" aria-labelledby="price_label">
-          <input id="price" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
+          <input id="price" name="price" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
           <label id="price_label" for="price">Product price</label>
         </div>
         <div class="field-container" aria-labelledby="description_label">
-          <textarea id="description" cols="10" rows="2" placeholder="" autocomplete="off" aria-autocomplete="none"></textarea>
+          <textarea id="description" name="description" cols="10" rows="2" placeholder="" autocomplete="off" aria-autocomplete="none"></textarea>
           <label id="description_label" for="description">Product description</label>
         </div>
         <button type="submit" class="button">Add product</button>

@@ -60,6 +60,14 @@ header a.nav-button:hover, header a.nav-button:focus-visible {
   transition: background-color var(--transition-time);
 }
 
+header a.nav-button.logout {
+  color: var(--color-danger);
+}
+
+header a.nav-button.logout:hover, header a.nav-button.logout:focus-visible {
+  background-color: var(--color-danger-transparent);
+}
+
 header button.searchbar-toggler svg {
   vertical-align: text-bottom;
 }

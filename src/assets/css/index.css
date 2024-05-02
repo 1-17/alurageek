@@ -6,6 +6,8 @@
   --color-accent: rgb(42, 122, 228);
   --color-accent-lighter: rgb(85, 149, 233);
   --color-accent-transparent: rgb(42, 122, 228, 0.15);
+  --color-danger: rgb(206, 28, 28);
+  --color-danger-transparent: rgb(206, 28, 28, 0.15);
   --font-primary: "Raleway", sans-serif;
   --font-sm: 0.75rem;
   --font-base: 1rem;

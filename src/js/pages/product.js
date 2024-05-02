@@ -1,3 +1,3 @@
-import products from "../products.js"
+import products from "../utils/products.js"
 
 document.addEventListener("DOMContentLoaded", products.renderProductAndSuggestions)

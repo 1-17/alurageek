@@ -31,6 +31,10 @@
     font-size: var(--font-xl) !important;
   }
 
+  section.category-section:not(:first-child) {
+    margin-top: calc(var(--spacing-base) * 2) !important;
+  }
+
   ul.products-list {
     grid-template-columns: repeat(4, 1fr) !important;
   }
@@ -47,6 +51,7 @@
   }
 
   section.product-details div.info-container {
+    min-width: 60%;
     margin-top: 0 !important;
   }
 

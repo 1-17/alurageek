@@ -71,7 +71,7 @@ products.renderByCategory = () => {
         const categoryId = category.toLowerCase().replace(" ", "-")
 
         renderContainer.innerHTML += `
-          <section id="${categoryId}" aria-label="${category} products">
+          <section id="${categoryId}" class="category-section" aria-label="${category} products">
             <div class="products-header">
               <h2 class="products-category">${category}</h2>
               <a href="/products/${categoryId}.html" class="see-all">See all</a>

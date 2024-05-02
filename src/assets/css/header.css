@@ -9,7 +9,7 @@ header nav.container {
   gap: var(--spacing-xs) var(--spacing-sm);
 }
 
-header .first-column {
+header div.first-column {
   width: 100%;
 }
 

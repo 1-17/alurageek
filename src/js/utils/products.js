@@ -1,26 +1,24 @@
-import formData from "./formData.js"
-
 const products = {
   _key: "products",
   _renderFallbackComponent: undefined,
   _get: undefined,
   add: undefined,
-  edit: undefined,
-  delete: undefined,
+  _edit: undefined,
+  _delete: undefined,
   renderByCategory: undefined,
-  renderProductAndSuggestions: undefined,
+  renderProductDetailsAndSuggestions: undefined,
   renderAll: undefined
 }
 
-const renderContainer = document.querySelector("main")
+const productsListContainer = document.querySelector("main")
 const maxProductsPerRow = 6
 
 products._renderFallbackComponent = (message) => {
-  if (!message || message.trim() === "") {
+  if (!message.trim()) {
     throw new Error("Render Fallback Component: Missing message.")
   }
 
-  renderContainer.innerHTML += `<p class="products-list-fallback">${message}</p>`
+  productsListContainer.innerHTML += `<p class="products-list-fallback">${message}</p>`
 }
 
 products._get = () => {
@@ -42,21 +40,20 @@ products._get = () => {
 
 const productsList = products._get()
 
-products.add = (e) => {
+products.add = () => {
   let newId = Math.max(...productsList.map(product => product.id)) + 1
 
   const newProduct = {
-    id: newId,
-    ...formData(e)
+    id: newId
   }
 
   localStorage.setItem(products._key, JSON.stringify([newProduct, ...productsList]))
   window.location.href = "/products.html"
 }
 
-products.edit = (productId) => console.log(Number(productId))
+products._edit = (productId) => console.log(Number(productId))
 
-products.delete = (productId) => {
+products._delete = (productId) => {
   const newList = productsList.filter(product => product.id !== Number(productId))
   localStorage.setItem(products._key, JSON.stringify(newList))
   window.location.href = "/products.html"
@@ -70,7 +67,7 @@ products.renderByCategory = () => {
       if (productsByCategory[category].length > 0) {
         const categoryId = category.toLowerCase().replace(" ", "-")
 
-        renderContainer.innerHTML += `
+        productsListContainer.innerHTML += `
           <section id="${categoryId}" class="category-section" aria-label="${category} products">
             <div class="products-header">
               <h2 class="products-category">${category}</h2>
@@ -102,7 +99,7 @@ products.renderByCategory = () => {
   products._renderFallbackComponent("No products to show yet.")
 }
 
-products.renderProductAndSuggestions = () => {
+products.renderProductDetailsAndSuggestions = () => {
   let pageTitle = ""
   const productId = Number(new URLSearchParams(window.location.search).get("id"))
 
@@ -110,8 +107,9 @@ products.renderProductAndSuggestions = () => {
     products._renderFallbackComponent("Product not found.")
   }
 
+  /* Similar Products container rendering */
   if (productsList && productsList.length > 1) {
-    renderContainer.innerHTML += `
+    productsListContainer.innerHTML += `
       <section class="similar-products" aria-labelledby="similar_products">
         <h2 id="similar_products">Similar Products</h2>
         <ul id="products_list" class="products-list" aria-labelledby="similar_products"></ul>
@@ -125,7 +123,8 @@ products.renderProductAndSuggestions = () => {
     if (product.id === productId) {
       pageTitle = ` | ${product.name}`
 
-      renderContainer.insertAdjacentHTML("afterbegin", `
+      /* Product Details rendering */
+      productsListContainer.insertAdjacentHTML("afterbegin", `
         <section class="product-details" aria-label="${product.name}">
           <img src="${product.image}" alt="${product.name}" role="img">
           <div class="info-container">
@@ -138,6 +137,7 @@ products.renderProductAndSuggestions = () => {
       return
     }
 
+    /* Similar products without current product */
     if (i < maxProductsPerRow) {
       listElement.innerHTML += `
         <li aria-label="${product.name}">
@@ -160,7 +160,7 @@ products.renderProductAndSuggestions = () => {
 
 products.renderAll = () => {
   if (productsList && productsList.length > 0) {
-    renderContainer.innerHTML += `
+    productsListContainer.innerHTML += `
       <ul class="products-list all-products" aria-label="Products">
         ${productsList.map(product => `
           <li aria-label="${product.name}">
@@ -186,11 +186,11 @@ products.renderAll = () => {
     `
 
     document.querySelectorAll("[data-delete]").forEach(button => {
-      button.addEventListener("click", () => products.delete(button.dataset.delete))
+      button.addEventListener("click", () => products._delete(button.dataset.delete))
     })
 
     document.querySelectorAll("[data-edit]").forEach(button => {
-      button.addEventListener("click", () => products.edit(button.dataset.edit))
+      button.addEventListener("click", () => products._edit(button.dataset.edit))
     })
 
     return

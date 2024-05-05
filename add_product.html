@@ -39,7 +39,6 @@
   <link rel="stylesheet" href="src/assets/css/footer.css">
   <!-- JavaScript -->
   <script type="module" src="src/js/index.js" defer></script>
-  <script type="module" src="src/js/pages/addProduct.js" defer></script>
 </head>
 <body>
   <header>
@@ -47,7 +46,7 @@
       <div class="first-column">
         <h1 class="logo"><a href="/"><span class="alura">Alura</span>Geek</a></h1>
         <form id="search_product" class="search hidden" aria-labelledby="search_input">
-          <input id="search_input" type="text" placeholder="What to find?" aria-label="Search product" autocomplete="off" aria-autocomplete="none">
+          <input id="search_input" type="text" placeholder="What to find?" aria-label="Search product">
           <button type="submit" aria-labelledby="search_input">
             <svg width="24px" height="25px" viewBox="0 0 24 25" aria-label="Magnifying glass" xmlns="http://www.w3.org/2000/svg">
               <path fill="currentColor" d="M15.4999 14.5H14.7099L14.4299 14.23C15.6299 12.83 16.2499 10.92 15.9099 8.89002C15.4399 6.11002 13.1199 3.89002 10.3199 3.55002C6.08989 3.03002 2.52989 6.59001 3.04989 10.82C3.38989 13.62 5.60989 15.94 8.38989 16.41C10.4199 16.75 12.3299 16.13 13.7299 14.93L13.9999 15.21V16L18.2499 20.25C18.6599 20.66 19.3299 20.66 19.7399 20.25C20.1499 19.84 20.1499 19.17 19.7399 18.76L15.4999 14.5ZM9.49989 14.5C7.00989 14.5 4.99989 12.49 4.99989 10C4.99989 7.51002 7.00989 5.50002 9.49989 5.50002C11.9899 5.50002 13.9999 7.51002 13.9999 10C13.9999 12.49 11.9899 14.5 9.49989 14.5Z"></path>
@@ -67,31 +66,29 @@
     </nav>
   </header>
   <main class="container">
-    <form id="add_product" class="add-product" aria-labelledby="add_new_product">
-      <fieldset>
-        <legend id="add_new_product">Add new product</legend>
-        <div class="field-container" aria-labelledby="image_label">
-          <input id="image" name="image" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
-          <label id="image_label" for="image">Product image URL</label>
-        </div>
-        <div class="field-container" aria-labelledby="category_label">
-          <input id="category" name="category" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
-          <label id="category_label" for="category">Product category</label>
-        </div>
-        <div class="field-container" aria-labelledby="name_label">
-          <input id="name" name="name" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
-          <label id="name_label" for="name">Product name</label>
-        </div>
-        <div class="field-container" aria-labelledby="price_label">
-          <input id="price" name="price" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
-          <label id="price_label" for="price">Product price</label>
-        </div>
-        <div class="field-container" aria-labelledby="description_label">
-          <textarea id="description" name="description" cols="10" rows="2" placeholder="" autocomplete="off" aria-autocomplete="none"></textarea>
-          <label id="description_label" for="description">Product description</label>
-        </div>
-        <button type="submit" class="button">Add product</button>
-      </fieldset>
+    <form id="add_product" class="add-product" aria-labelledby="add_product_legend">
+      <legend id="add_product_legend">Add new product</legend>
+      <div class="field-container" aria-labelledby="product_image_label">
+        <input id="product_image" name="product_image" type="url">
+        <label id="product_image_label" for="product_image">Product image URL</label>
+      </div>
+      <div class="field-container" aria-labelledby="product_category_label">
+        <input id="product_category" name="product_category" type="text">
+        <label id="product_category_label" for="product_category">Product category</label>
+      </div>
+      <div class="field-container" aria-labelledby="product_name_label">
+        <input id="product_name" name="product_name" type="text">
+        <label id="product_name_label" for="product_name">Product name</label>
+      </div>
+      <div class="field-container" aria-labelledby="product_price_label">
+        <input id="product_price" name="product_price" type="number">
+        <label id="product_price_label" for="product_price">Product price</label>
+      </div>
+      <div class="field-container" aria-labelledby="product_description_label">
+        <textarea id="product_description" name="product_description" cols="10" rows="2"></textarea>
+        <label id="product_description_label" for="product_description">Product description</label>
+      </div>
+      <button type="submit" class="button">Add product</button>
     </form>
   </main>
   <footer>
@@ -108,19 +105,17 @@
             <li><a href="/">Advertise Here</a></li>
           </ul>
         </div>
-        <form aria-labelledby="contact_us">
-          <fieldset>
-            <legend id="contact_us">Contact Us</legend>
-            <div class="field-container" aria-labelledby="name_label">
-              <input id="name" type="text" placeholder="" autocomplete="off" aria-autocomplete="none">
-              <label id="name_label" for="name">Name</label>
-            </div>
-            <div class="field-container" aria-labelledby="message_label">
-              <textarea id="message" cols="10" rows="2" placeholder="" autocomplete="off" aria-autocomplete="none"></textarea>
-              <label id="message_label" for="message">Write your message</label>
-            </div>
-            <button type="submit" class="button">Send message</button>
-          </fieldset>
+        <form id="contact_us" aria-labelledby="contact_us_legend">
+          <legend id="contact_us_legend">Contact Us</legend>
+          <div class="field-container" aria-labelledby="name_label">
+            <input id="name" type="text">
+            <label id="name_label" for="name">Name</label>
+          </div>
+          <div class="field-container" aria-labelledby="message_label">
+            <textarea id="message" cols="10" rows="2"></textarea>
+            <label id="message_label" for="message">Write your message</label>
+          </div>
+          <button type="submit" class="button">Send message</button>
         </form>
       </nav>
     </div>

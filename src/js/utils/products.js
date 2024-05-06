@@ -60,18 +60,30 @@ products._delete = (productId) => {
 }
 
 products.renderByCategory = () => {
+  const banner = document.querySelector("div#banner")
+  const bannerButton = banner.querySelector("a#see_products")
+  
   if (productsList && productsList.length > 0) {
     const productsByCategory = Object.groupBy(productsList, ({ category }) => category)
+    const categories = Object.keys(productsByCategory)
+    const newBannerButtonCategory = categories[categories.length - 1]
 
     for (const [category, products] of Object.entries(productsByCategory)) {
+      if (!bannerButton.textContent.includes(category)) {
+        bannerButton.href = `#${newBannerButtonCategory.replace(" ", "_").toLowerCase()}`
+        bannerButton.textContent = bannerButton.textContent.replace("Consoles", newBannerButtonCategory)
+      }
+
       if (productsByCategory[category].length > 0) {
-        const categoryId = category.toLowerCase().replace(" ", "-")
+        const categoryId = category.replace(" ", "_").toLowerCase()
 
         productsListContainer.innerHTML += `
           <section id="${categoryId}" class="category-section" aria-label="${category} products">
             <div class="products-header">
               <h2 class="products-category">${category}</h2>
-              <a href="/products/${categoryId}.html" class="see-all">See all</a>
+              ${productsByCategory[category].length > maxProductsPerRow
+                ? `<a href="/products/${categoryId}.html" class="see-all">See all</a>` : ""
+              }
             </div>
             <ul class="products-list" aria-label="Products">
               ${products.map((product, i) => {
@@ -96,6 +108,7 @@ products.renderByCategory = () => {
     return
   }
 
+  banner.remove()
   products._renderFallbackComponent("No products to show yet.")
 }
 

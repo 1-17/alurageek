@@ -24,12 +24,7 @@ form.submissions = {
   login: session.login
 }
 
-form.validate = (field, isSubmitEvent) => {
-  if (isSubmitEvent) {
-    form.validations.email.value = (value) => value === "admin@alurageek.com" || "Email does not exist. Please, try again."
-    form.validations.password.value = (value) => value === "123456" || "Password is wrong. Please, try again."
-  }
-
+form.validate = (field) => {
   let hintMessageElement
 
   if (form.validations[field.name]) {
@@ -42,25 +37,37 @@ form.validate = (field, isSubmitEvent) => {
 
         const hintMessageId = `${field.name}_hint_message`
         field.setAttribute("aria-describedby", hintMessageId)
+        field.parentElement.classList.add("warning")
         field.parentElement.insertAdjacentHTML("beforeend", `
           <p id="${hintMessageId}" class="hint-message" role="alert" aria-live="polite" aria-assertive="true"></p>
         `)
-        hintMessageElement = document.getElementById(hintMessageId)
+        hintMessageElement = document.querySelector(`p#${hintMessageId}`)
         hintMessageElement.textContent = message
         break
       }
     }
   }
 
-  field.onfocus = () => hintMessageElement && hintMessageElement.remove()
+  field.onfocus = () => {
+    if (hintMessageElement) {
+      hintMessageElement.parentElement.classList.remove("warning")
+      hintMessageElement.remove()
+    }
+
+    form.isValid = true
+  }
 }
 
 form.submit = (e) => {
   e.preventDefault()
+  
+  form.validations.email.value = (value) => value === "admin@alurageek.com" || "Email does not exist. Please, try again."
+  form.validations.password.value = (value) => value === "123456" || "Password is wrong. Please, try again."
+  
   const { id, elements } = e.target
-
+  
   for (const element of elements) {
-    form.validate(element, true)
+    form.validate(element)
   }
 
   if (form.isValid) {

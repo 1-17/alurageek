@@ -1,3 +1,5 @@
+import { formData } from "./form.js"
+
 const products = {
   _key: "products",
   _renderFallbackComponent: undefined,
@@ -40,11 +42,10 @@ products._get = () => {
 
 const productsList = products._get()
 
-products.add = () => {
-  let newId = Math.max(...productsList.map(product => product.id)) + 1
-
+products.add = (e) => {
   const newProduct = {
-    id: newId
+    id: Math.max(...productsList.map(product => product.id)) + 1,
+    ...formData(e)
   }
 
   localStorage.setItem(products._key, JSON.stringify([newProduct, ...productsList]))

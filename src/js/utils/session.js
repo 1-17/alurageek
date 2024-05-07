@@ -1,17 +1,18 @@
 const session = {
-  _key: "logged",
+  key: "logged",
   login: undefined,
   logout: undefined,
   isLogged: undefined
 }
 
 session.login = () => {
-  localStorage.setItem(session._key, true)
+  localStorage.setItem(session.key, true)
   window.location.replace("/products.html")
 }
 
-session.logout = () => localStorage.removeItem(session._key)
+session.logout = () => localStorage.removeItem(session.key)
 
-session.isLogged = !!localStorage.getItem(session._key)
+session.isLogged = !!localStorage.getItem(session.key)
 
-export default session
+const { key, ...sessionMethods } = session
+export default sessionMethods

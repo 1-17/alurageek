@@ -7,7 +7,8 @@ const form = {
   isValid: true,
   validate: undefined,
   data: undefined,
-  submit: undefined
+  submit: undefined,
+  handle: undefined
 }
 
 form.validations = {
@@ -130,9 +131,6 @@ form.data = (e) => {
   return dataObject
 }
 
-const { data: formData } = form
-export { formData }
-
 form.submit = (e) => {
   e.preventDefault()
   
@@ -158,7 +156,7 @@ form.submit = (e) => {
   }
 }
 
-const handleForm = () => {
+form.handle = () => {
   for (const formElement of document.querySelectorAll("form")) {
     formElement.noValidate = true
     formElement.addEventListener("submit", form.submit)
@@ -195,4 +193,5 @@ const handleForm = () => {
   }
 }
 
-export default handleForm
+const { handle, data } = form
+export default { handle, data }

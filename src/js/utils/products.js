@@ -1,12 +1,12 @@
-import { formData } from "./form.js"
+import form from "./form.js"
 
 const products = {
-  _key: "products",
-  _renderFallbackComponent: undefined,
-  _get: undefined,
+  key: "products",
+  renderFallback: undefined,
+  get: undefined,
   add: undefined,
-  _edit: undefined,
-  _delete: undefined,
+  edit: undefined,
+  delete: undefined,
   renderByCategory: undefined,
   renderProductDetailsAndSuggestions: undefined,
   renderAll: undefined
@@ -15,7 +15,7 @@ const products = {
 const productsListContainer = document.querySelector("main")
 const maxProductsPerRow = 6
 
-products._renderFallbackComponent = (message) => {
+products.renderFallback = (message) => {
   if (!message.trim()) {
     throw new Error("Render Fallback Component: Missing message.")
   }
@@ -23,14 +23,14 @@ products._renderFallbackComponent = (message) => {
   productsListContainer.innerHTML += `<p class="products-list-fallback">${message}</p>`
 }
 
-products._get = () => {
-  const productsData = localStorage.getItem(products._key)
+products.get = () => {
+  const productsData = localStorage.getItem(products.key)
 
   if (!productsData) {
     fetch("products.json")
       .then(res => res.json())
-      .then(list => localStorage.setItem(products._key, JSON.stringify(list)))
-      .catch(() => products._renderFallbackComponent("Failed to get posts list. Please, try again later."))
+      .then(list => localStorage.setItem(products.key, JSON.stringify(list)))
+      .catch(() => products.renderFallback("Failed to get posts list. Please, try again later."))
   }
 
   const list = JSON.parse(productsData)
@@ -40,23 +40,23 @@ products._get = () => {
   }
 }
 
-const productsList = products._get()
+const productsList = products.get()
 
 products.add = (e) => {
   const newProduct = {
     id: Math.max(...productsList.map(product => product.id)) + 1,
-    ...formData(e)
+    ...form.data(e)
   }
 
-  localStorage.setItem(products._key, JSON.stringify([newProduct, ...productsList]))
+  localStorage.setItem(products.key, JSON.stringify([newProduct, ...productsList]))
   window.location.href = "/products.html"
 }
 
-products._edit = (productId) => console.log(Number(productId))
+products.edit = (productId) => console.log(Number(productId))
 
-products._delete = (productId) => {
+products.delete = (productId) => {
   const newList = productsList.filter(product => product.id !== Number(productId))
-  localStorage.setItem(products._key, JSON.stringify(newList))
+  localStorage.setItem(products.key, JSON.stringify(newList))
   window.location.href = "/products.html"
 }
 
@@ -111,7 +111,7 @@ products.renderByCategory = () => {
   }
 
   banner.remove()
-  products._renderFallbackComponent("No products to show yet.")
+  products.renderFallback("No products to show yet.")
 }
 
 products.renderProductDetailsAndSuggestions = () => {
@@ -119,7 +119,7 @@ products.renderProductDetailsAndSuggestions = () => {
   const productId = Number(new URLSearchParams(window.location.search).get("id"))
 
   if (!productId || !productsList.find(product => product.id === productId)) {
-    products._renderFallbackComponent("Product not found.")
+    products.renderFallback("Product not found.")
   }
 
   /* Similar Products container rendering */
@@ -201,17 +201,18 @@ products.renderAll = () => {
     `
 
     document.querySelectorAll("[data-delete]").forEach(button => {
-      button.addEventListener("click", () => products._delete(button.dataset.delete))
+      button.addEventListener("click", () => products.delete(button.dataset.delete))
     })
 
     document.querySelectorAll("[data-edit]").forEach(button => {
-      button.addEventListener("click", () => products._edit(button.dataset.edit))
+      button.addEventListener("click", () => products.edit(button.dataset.edit))
     })
 
     return
   }
 
-  products._renderFallbackComponent("No products to show yet.")
+  products.renderFallback("No products to show yet.")
 }
 
-export default products
+const { add, renderByCategory, renderProductDetailsAndSuggestions, renderAll } = products
+export default { add, renderByCategory, renderProductDetailsAndSuggestions, renderAll }

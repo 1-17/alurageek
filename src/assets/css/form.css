@@ -21,6 +21,15 @@ form.add-product legend {
   margin-bottom: var(--spacing-sm);
 }
 
+form.add-product img.preview {
+  background-color: var(--color-tertiary);
+  border-radius: 5px;
+  display: block;
+  height: 200px;
+  margin-bottom: var(--spacing-xs);
+  padding: var(--spacing-sm);
+}
+
 legend {
   font-weight: var(--font-bold);
   margin-bottom: var(--spacing-xs);

@@ -12,13 +12,54 @@ const form = {
 
 form.validations = {
   email: {
-    required: (value) => value.trim() || "Email is required.",
+    required: (value) => value || "Email is required.",
     pattern: (value) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value) || "Email format is wrong. Please, insert a valid email."
   },
   password: {
-    required: (value) => value.trim() || "Password is required.",
+    required: (value) => value || "Password is required.",
     minLength: (value) => value.length >= 6 || "Password is too short. It must have at least 6 characters.",
     maxLength: (value) => value.length <= 15 || "Password is too long. It must have max of 15 characters."
+  },
+  product_image: {
+    required: (value) => value || "Product image URL is required.",
+    pattern: (value) => /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#= ]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//= ]*)/.test(value) || "Product image URL is invalid. Please, insert a valid URL",
+    notFound: (value) => new Promise((resolve, reject) => {
+      const image = new Image()
+      const imageElement = document.forms.add_product.querySelector("img")
+
+      image.onload = () => {
+        const field = document.forms.add_product.elements.product_image
+
+        !imageElement && field.parentElement.insertAdjacentHTML("beforebegin", `
+          <img src="${value}" alt="Product Preview" class="preview" role="img">
+        `)
+
+        resolve(true)
+      }
+
+      image.onerror = () => {
+        imageElement && imageElement.remove()
+        reject("Product image URL is invalid or the image is not available anymore.")
+      }
+
+      image.src = value
+    })
+  },
+  product_category: {
+    required: (value) => value.trim() !== "" || "Product category is required.",
+    pattern: (value) => /^[a-zA-ZÀ-ÿ0-9 -']+$/.test(value) || "Product category is invalid. It must have only letters, numbers, hyphens (-) and apostrophes (').",
+    noHyphenOnStart: (value) => !value.startsWith("-") || "Product category is invalid. It cannot start with an hyphen (-).",
+    noApostropheOnStart: (value) => !value.startsWith("'") || "Product category is invalid. It cannot start with an apostrophe (')."
+  },
+  product_name: {
+    required: (value) => value.trim() !== "" || "Product name is required.",
+    pattern: (value) => /^[a-zA-ZÀ-ÿ0-9 -']+$/.test(value) || "Product name is invalid. It must have only letters, numbers, hyphens (-) and apostrophes (').",
+    noHyphenOnStart: (value) => !value.startsWith("-") || "Product name is invalid. It cannot start with an hyphen (-).",
+    noApostropheOnStart: (value) => !value.startsWith("'") || "Product name is invalid. It cannot start with an apostrophe (')."
+  },
+  product_price: {
+    required: (value) => value || "Product price is required.",
+    pattern: (value) => /^\d+$/.test(value) || "Product price is wrong. It must have only numbers."
   }
 }
 
@@ -27,40 +68,53 @@ form.submissions = {
   add_product: products.add
 }
 
-form.validate = (field) => {
+const renderHintMessage = (field, message) => {
   const hintMessageId = `${field.name}_hint_message`
+  const hintMessage = document.querySelector(`p#${hintMessageId}`)
 
+  form.isValid = false
+
+  if (!hintMessage) {
+    field.setAttribute("aria-describedby", hintMessageId)
+    field.parentElement.classList.add("warning")
+    field.parentElement.insertAdjacentHTML("beforeend", `
+      <p id="${hintMessageId}" class="hint-message" role="alert" aria-live="polite" aria-assertive="true">
+        ${message}
+      </p>
+    `)
+  }
+}
+
+const unmountHintMessage = (field) => {
+  const hintMessage = document.querySelector(`p#${field.name}_hint_message`)
+
+  if (hintMessage) {
+    field.removeAttribute("aria-describedby")
+    hintMessage.parentElement.classList.remove("warning")
+    hintMessage.remove()
+  }
+
+  form.isValid = true
+}
+
+form.validate = (field) => {
   if (form.validations[field.name]) {
     for (const validation of Object.values(form.validations[field.name])) {
       const validityCheck = validation(field.value)
-      const message = validityCheck !== field.value && validityCheck
+      
+      if (typeof validityCheck === "string" && validityCheck !== field.value) {
+        renderHintMessage(field, validityCheck)
+        break
+      }
 
-      if (typeof message === "string") {
-        form.isValid = false
-
-        field.setAttribute("aria-describedby", hintMessageId)
-        field.parentElement.classList.add("warning")
-        field.parentElement.insertAdjacentHTML("beforeend", `
-          <p id="${hintMessageId}" class="hint-message" role="alert" aria-live="polite" aria-assertive="true">
-            ${message}
-          </p>
-        `)
+      if (validityCheck instanceof Promise) {
+        validityCheck.catch(message => renderHintMessage(field, message))
         break
       }
     }
   }
 
-  field.onfocus = () => {
-    const hintMessage = document.querySelector(`p#${hintMessageId}`)
-
-    if (hintMessage) {
-      field.removeAttribute("aria-describedby")
-      hintMessage.parentElement.classList.remove("warning")
-      hintMessage.remove()
-    }
-
-    form.isValid = true
-  }
+  field.onfocus = () => unmountHintMessage(field)
 }
 
 form.data = (e) => {
@@ -111,6 +165,7 @@ const handleForm = () => {
 
     for (const element of formElement.elements) {
       if (element.name) {
+        element.value = ""
         !element.placeholder && (element.placeholder = "")
         element.autocomplete = "off"
         element.ariaAutoComplete = "none"

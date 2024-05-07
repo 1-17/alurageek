@@ -68,22 +68,23 @@ products.renderByCategory = () => {
     const productsByCategory = Object.groupBy(productsList, ({ category }) => category)
     const categories = Object.keys(productsByCategory)
     const newBannerButtonCategory = categories[categories.length - 1]
+    const formattedCategory = (category) => {
+      return category.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\s']+/g, "_").toLowerCase()
+    }
 
     for (const [category, products] of Object.entries(productsByCategory)) {
       if (!bannerButton.textContent.includes(category)) {
-        bannerButton.href = `#${newBannerButtonCategory.replace(" ", "_").toLowerCase()}`
+        bannerButton.href = `#${formattedCategory(newBannerButtonCategory)}`
         bannerButton.textContent = bannerButton.textContent.replace("Consoles", newBannerButtonCategory)
       }
 
       if (productsByCategory[category].length > 0) {
-        const categoryId = category.replace(" ", "_").toLowerCase()
-
         productsListContainer.innerHTML += `
-          <section id="${categoryId}" class="category-section" aria-label="${category} products">
+          <section id="${formattedCategory(category)}" class="category-section" aria-label="${category} products">
             <div class="products-header">
               <h2 class="products-category">${category}</h2>
               ${productsByCategory[category].length > maxProductsPerRow
-                ? `<a href="/products/${categoryId}.html" class="see-all">See all</a>` : ""
+                ? `<a href="/products/${formattedCategory(category)}.html" class="see-all">See all</a>` : ""
               }
             </div>
             <ul class="products-list" aria-label="Products">

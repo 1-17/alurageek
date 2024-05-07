@@ -47,19 +47,21 @@ form.validations = {
   },
   product_category: {
     required: (value) => value.trim() !== "" || "Product category is required.",
-    pattern: (value) => /^[a-zA-ZÀ-ÿ0-9 -']+$/.test(value) || "Product category is invalid. It must have only letters, numbers, hyphens (-) and apostrophes (').",
+    pattern: (value) => /^[a-zA-ZÀ-ÿ-'\s\d]+$/.test(value) || "Product category is invalid. It must have only letters, numbers, hyphens (-) and apostrophes (').",
     noHyphenOnStart: (value) => !value.startsWith("-") || "Product category is invalid. It cannot start with an hyphen (-).",
     noApostropheOnStart: (value) => !value.startsWith("'") || "Product category is invalid. It cannot start with an apostrophe (')."
   },
   product_name: {
     required: (value) => value.trim() !== "" || "Product name is required.",
-    pattern: (value) => /^[a-zA-ZÀ-ÿ0-9 -']+$/.test(value) || "Product name is invalid. It must have only letters, numbers, hyphens (-) and apostrophes (').",
+    pattern: (value) => /^[a-zA-ZÀ-ÿ-'\s\d]+$/.test(value) || "Product name is invalid. It must have only letters, numbers, hyphens (-) and apostrophes (').",
     noHyphenOnStart: (value) => !value.startsWith("-") || "Product name is invalid. It cannot start with an hyphen (-).",
     noApostropheOnStart: (value) => !value.startsWith("'") || "Product name is invalid. It cannot start with an apostrophe (')."
   },
   product_price: {
     required: (value) => value || "Product price is required.",
-    pattern: (value) => /^\d+$/.test(value) || "Product price is wrong. It must have only numbers."
+    pattern: (value) => /^[\d.,]+$/.test(value) || "Product price is wrong. It must have only numbers.",
+    minValue: (value) => value !== "0.00" || "Product price cannot be zero. Please, insert a price.",
+    maxValue: (value) => value.length <= 12 || "Product price is too high. Please, insert a valid price.",
   }
 }
 
@@ -157,12 +159,10 @@ form.submit = (e) => {
 }
 
 const handleForm = () => {
-  const forms = document.querySelectorAll("form")
-
-  forms.forEach(formElement => {
+  for (const formElement of document.querySelectorAll("form")) {
     formElement.noValidate = true
     formElement.addEventListener("submit", form.submit)
-
+  
     for (const element of formElement.elements) {
       if (element.name) {
         element.value = ""
@@ -173,9 +173,26 @@ const handleForm = () => {
         if (form.validations[element.name]) {
           element.addEventListener("blur", () => form.validate(element))
         }
+  
+        if (element.name === "product_price") {
+          element.value = "0.00"
+
+          element.addEventListener("input", (e) => {
+            const value = e.target.value
+
+            if (value.trim()) {
+              const cursorPosition = e.target.selectionStart
+              const cleanedInput = value.replace(/\D/g, '')
+              let valueAsPrice = (parseInt(cleanedInput, 10) / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  
+              e.target.value = valueAsPrice
+              e.target.setSelectionRange(cursorPosition, cursorPosition)
+            }
+          })
+        }
       }
     }
-  })
+  }
 }
 
 export default handleForm

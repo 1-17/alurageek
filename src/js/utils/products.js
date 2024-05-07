@@ -4,12 +4,14 @@ const products = {
   key: "products",
   renderFallback: undefined,
   get: undefined,
+  list: undefined,
   add: undefined,
   edit: undefined,
   delete: undefined,
   renderByCategory: undefined,
   renderProductDetailsAndSuggestions: undefined,
-  renderAll: undefined
+  renderAllFromCategory: undefined,
+  renderAll: undefined,
 }
 
 const productsListContainer = document.querySelector("main")
@@ -40,32 +42,39 @@ products.get = () => {
   }
 }
 
-const productsList = products.get()
+products.list = products.get()
 
 products.add = (e) => {
-  const newProduct = {
-    id: Math.max(...productsList.map(product => product.id)) + 1,
-    ...form.data(e)
+  const formData = {}
+
+  for (const [key, value] of Object.entries(form.data(e))) {
+    formData[key.replace("product_", "")] = value
   }
 
-  localStorage.setItem(products.key, JSON.stringify([newProduct, ...productsList]))
+  const newProduct = {
+    id: Math.max(...products.list.map(product => product.id)) + 1,
+    ...formData
+  }
+
+  localStorage.setItem(products.key, JSON.stringify([newProduct, ...products.list]))
   window.location.href = "/products.html"
 }
 
 products.edit = (productId) => console.log(Number(productId))
 
 products.delete = (productId) => {
-  const newList = productsList.filter(product => product.id !== Number(productId))
+  const newList = products.list.filter(product => product.id !== Number(productId))
   localStorage.setItem(products.key, JSON.stringify(newList))
-  window.location.href = "/products.html"
+  window.location.reload()
 }
+
+const productsByCategory = Object.groupBy(products.list, ({ category }) => category)
 
 products.renderByCategory = () => {
   const banner = document.querySelector("div#banner")
   const bannerButton = banner.querySelector("a#see_products")
   
-  if (productsList && productsList.length > 0) {
-    const productsByCategory = Object.groupBy(productsList, ({ category }) => category)
+  if (products.list && products.list.length > 0) {
     const categories = Object.keys(productsByCategory)
     const newBannerButtonCategory = categories[categories.length - 1]
     const formattedCategory = (category) => {
@@ -84,7 +93,7 @@ products.renderByCategory = () => {
             <div class="products-header">
               <h2 class="products-category">${category}</h2>
               ${productsByCategory[category].length > maxProductsPerRow
-                ? `<a href="/products/${formattedCategory(category)}.html" class="see-all">See all</a>` : ""
+                ? `<a href="/category.html?name=${category}" class="see-all">See all</a>` : ""
               }
             </div>
             <ul class="products-list" aria-label="Products">
@@ -118,12 +127,12 @@ products.renderProductDetailsAndSuggestions = () => {
   let pageTitle = ""
   const productId = Number(new URLSearchParams(window.location.search).get("id"))
 
-  if (!productId || !productsList.find(product => product.id === productId)) {
+  if (!productId || !products.list.find(product => product.id === productId)) {
     products.renderFallback("Product not found.")
   }
 
   /* Similar Products container rendering */
-  if (productsList && productsList.length > 1) {
+  if (products.list && products.list.length > 1) {
     productsListContainer.innerHTML += `
       <section class="similar-products" aria-labelledby="similar_products">
         <h2 id="similar_products">Similar Products</h2>
@@ -134,7 +143,7 @@ products.renderProductDetailsAndSuggestions = () => {
   
   const listElement = document.querySelector("ul#products_list")
 
-  productsList.map((product, i) => {
+  products.list.map((product, i) => {
     if (product.id === productId) {
       pageTitle = ` | ${product.name}`
 
@@ -173,11 +182,40 @@ products.renderProductDetailsAndSuggestions = () => {
   }
 }
 
+products.renderAllFromCategory = () => {
+  const category = new URLSearchParams(window.location.search).get("name")
+
+  if (productsByCategory[category]) {
+    productsListContainer.innerHTML += `
+      <section class="category-section" aria-label="${category} products">
+        <div class="products-header">
+          <h2 class="products-category">${category}</h2>
+        </div>
+        <ul class="products-list" aria-label="Products">
+          ${productsByCategory[category].map(product => `
+            <li aria-label="${product.name}">
+              <a href="/product.html?id=${product.id}">
+                <img src="${product.image}" alt="${product.name}" role="img">
+                <span>${product.name}</span>
+                <span class="price" role="none">${product.price}</span>
+                <span class="see-product">See product</span>
+              </a>
+            </li>
+          `).join("")}
+        </ul>
+      </section>
+    `
+    return
+  }
+
+  products.renderFallback("Category does not exist, so no products to show.")
+}
+
 products.renderAll = () => {
-  if (productsList && productsList.length > 0) {
+  if (products.list && products.list.length > 0) {
     productsListContainer.innerHTML += `
       <ul class="products-list all-products" aria-label="Products">
-        ${productsList.map(product => `
+        ${products.list.map(product => `
           <li aria-label="${product.name}">
             <div class="buttons-container" role="none">
               <button type="button" aria-label="Delete" data-delete="${product.id}">
@@ -214,5 +252,5 @@ products.renderAll = () => {
   products.renderFallback("No products to show yet.")
 }
 
-const { add, renderByCategory, renderProductDetailsAndSuggestions, renderAll } = products
-export default { add, renderByCategory, renderProductDetailsAndSuggestions, renderAll }
+const { add, renderByCategory, renderProductDetailsAndSuggestions, renderAllFromCategory, renderAll } = products
+export default { add, renderByCategory, renderProductDetailsAndSuggestions, renderAllFromCategory, renderAll }

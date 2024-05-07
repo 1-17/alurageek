@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AluraGeek</title>
+  <meta name="description" content="AluraGeek is a fictional online store with a variety of merchandise inspired by pop culture, including sci-fi, fantasy, gaming, and more items.">
+  <meta name="keywords" content="alurageek, online store, geek, merchandise, pop culture, sci-fi, fantasy, gaming, fictional">
+  <meta name="author" content="117">
+  <meta name="robots" content="index, follow">
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg">
+  <link rel="shortcut icon" href="favicon.svg" type="image/svg">
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://1-17.github.io/alurageek/">
+  <meta name="title" property="og:title" content="AluraGeek">
+  <meta property="og:description" content="AluraGeek is a fictional online store with a variety of merchandise inspired by pop culture, including sci-fi, fantasy, gaming, and more items.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/1-17/alurageek/main/preview.png">
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://1-17.github.io/alurageek/">
+  <meta name="title" property="twitter:title" content="AluraGeek">
+  <meta property="twitter:description" content="AluraGeek is a fictional online store with a variety of merchandise inspired by pop culture, including sci-fi, fantasy, gaming, and more items.">
+  <meta property="twitter:image" content="https://raw.githubusercontent.com/1-17/alurageek/main/preview.png">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400..700&display=swap" rel="stylesheet">
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="src/assets/css/normalize.css">
+  <link rel="stylesheet" href="src/assets/css/index.css">
+  <link rel="stylesheet" href="src/assets/css/media-query.css">
+  <link rel="stylesheet" href="src/assets/css/logo.css">
+  <link rel="stylesheet" href="src/assets/css/button.css">
+  <link rel="stylesheet" href="src/assets/css/form.css">
+  <link rel="stylesheet" href="src/assets/css/header.css">
+  <link rel="stylesheet" href="src/assets/css/footer.css">
+  <link rel="stylesheet" href="src/assets/css/products-list.css">
+  <!-- JavaScript -->
+  <script type="module" src="src/js/index.js" defer></script>
+  <script type="module" src="src/js/pages/category.js" defer></script>
+</head>
+<body>
+  <header>
+    <nav class="container" aria-label="Header navigation">
+      <div class="first-column">
+        <h1 class="logo"><a href="/"><span class="alura">Alura</span>Geek</a></h1>
+        <form id="search_product" class="search hidden" aria-labelledby="search">
+          <input id="search" name="search" type="text" placeholder="What to find?" aria-label="Search product">
+          <button type="submit" aria-labelledby="search">
+            <svg width="24px" height="25px" viewBox="0 0 24 25" aria-label="Magnifying glass" xmlns="http://www.w3.org/2000/svg">
+              <path fill="currentColor" d="M15.4999 14.5H14.7099L14.4299 14.23C15.6299 12.83 16.2499 10.92 15.9099 8.89002C15.4399 6.11002 13.1199 3.89002 10.3199 3.55002C6.08989 3.03002 2.52989 6.59001 3.04989 10.82C3.38989 13.62 5.60989 15.94 8.38989 16.41C10.4199 16.75 12.3299 16.13 13.7299 14.93L13.9999 15.21V16L18.2499 20.25C18.6599 20.66 19.3299 20.66 19.7399 20.25C20.1499 19.84 20.1499 19.17 19.7399 18.76L15.4999 14.5ZM9.49989 14.5C7.00989 14.5 4.99989 12.49 4.99989 10C4.99989 7.51002 7.00989 5.50002 9.49989 5.50002C11.9899 5.50002 13.9999 7.51002 13.9999 10C13.9999 12.49 11.9899 14.5 9.49989 14.5Z"></path>
+            </svg>
+          </button>
+        </form>
+      </div>
+      <button id="searchbar_toggler" type="button" class="searchbar-toggler" aria-label="Open search products bar">
+        <svg width="24px" height="25px" viewBox="0 0 24 25" aria-label="Magnifying glass" aria-hidden="false" xmlns="http://www.w3.org/2000/svg">
+          <path fill="currentColor" d="M15.4999 14.5H14.7099L14.4299 14.23C15.6299 12.83 16.2499 10.92 15.9099 8.89002C15.4399 6.11002 13.1199 3.89002 10.3199 3.55002C6.08989 3.03002 2.52989 6.59001 3.04989 10.82C3.38989 13.62 5.60989 15.94 8.38989 16.41C10.4199 16.75 12.3299 16.13 13.7299 14.93L13.9999 15.21V16L18.2499 20.25C18.6599 20.66 19.3299 20.66 19.7399 20.25C20.1499 19.84 20.1499 19.17 19.7399 18.76L15.4999 14.5ZM9.49989 14.5C7.00989 14.5 4.99989 12.49 4.99989 10C4.99989 7.51002 7.00989 5.50002 9.49989 5.50002C11.9899 5.50002 13.9999 7.51002 13.9999 10C13.9999 12.49 11.9899 14.5 9.49989 14.5Z"></path>
+        </svg>
+        <svg width="24px" height="24px" viewBox="0 0 24 24" aria-label="X" hidden aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289Z"></path>
+        </svg>
+      </button>
+    </nav>
+  </header>
+  <main class="container"></main>
+  <footer>
+    <div class="menu-container">
+      <nav class="container" aria-label="Footer navigation">
+        <div class="first-column">
+          <h2 class="logo"><a href="/"><span class="alura">Alura</span>Geek</a></h2>
+          <ul class="store-links" aria-label="Navigation">
+            <li><a href="/">About Us</a></li>
+            <li><a href="/">Privacy Policy</a></li>
+            <li><a href="/">Loyalty Program</a></li>
+            <li><a href="/">Our Stores</a></li>
+            <li><a href="/">Franchise Opportunities</a></li>
+            <li><a href="/">Advertise Here</a></li>
+          </ul>
+        </div>
+        <form id="contact_us" aria-labelledby="contact_us_legend">
+          <legend id="contact_us_legend">Contact Us</legend>
+          <div class="field-container" aria-labelledby="name_label">
+            <input id="name" name="name" type="text">
+            <label id="name_label" for="name">Name</label>
+          </div>
+          <div class="field-container" aria-labelledby="message_label">
+            <textarea id="message" name="message" cols="10" rows="2"></textarea>
+            <label id="message_label" for="message">Write your message</label>
+          </div>
+          <button type="submit" class="button">Send message</button>
+        </form>
+      </nav>
+    </div>
+    <div class="container credits" aria-label="Credits">
+      <p>Developed by <a href="https://github.com/1-17" target="_blank" rel="noopener noreferrer" aria-label="GitHub">117</a></p>
+      <span>2024</span>
+    </div>
+  </footer>
+</body>
+</html>

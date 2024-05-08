@@ -1,3 +1,4 @@
+import setPageTitle from "./setPageTitle.js"
 import form from "./form.js"
 
 const products = {
@@ -124,7 +125,6 @@ products.renderByCategory = () => {
 }
 
 products.renderProductDetailsAndSuggestions = () => {
-  let pageTitle = ""
   const productId = Number(new URLSearchParams(window.location.search).get("id"))
 
   if (!productId || !products.list.find(product => product.id === productId)) {
@@ -145,7 +145,7 @@ products.renderProductDetailsAndSuggestions = () => {
 
   products.list.map((product, i) => {
     if (product.id === productId) {
-      pageTitle = ` | ${product.name}`
+      setPageTitle(product.name)
 
       /* Product Details rendering */
       productsListContainer.insertAdjacentHTML("afterbegin", `
@@ -175,15 +175,11 @@ products.renderProductDetailsAndSuggestions = () => {
       `
     }
   }).join("")
-
-  if (pageTitle) {
-    document.querySelector("title").textContent += pageTitle
-    document.querySelectorAll("[name='title']").forEach(property => property.content += pageTitle)
-  }
 }
 
 products.renderAllFromCategory = () => {
   const category = new URLSearchParams(window.location.search).get("name")
+  setPageTitle(category)
 
   if (productsByCategory[category]) {
     productsListContainer.innerHTML += `

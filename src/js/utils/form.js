@@ -81,7 +81,7 @@ const renderHintMessage = (field, message) => {
     field.setAttribute("aria-describedby", hintMessageId)
     field.parentElement.classList.add("warning")
     field.parentElement.insertAdjacentHTML("beforeend", `
-      <p id="${hintMessageId}" class="hint-message" role="alert" aria-label="${field.name.charAt(0).toUpperCase() + field.name.slice(1)} hint message" aria-live="polite" aria-assertive="true">${message}</p>
+      <p id="${hintMessageId}" class="hint-message" role="alert" aria-label="${field.name.charAt(0).toUpperCase() + field.name.slice(1).replace("_", " ")} hint message" aria-live="polite" aria-assertive="true">${message}</p>
     `)
   }
 }

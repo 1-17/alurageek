@@ -102,11 +102,11 @@ products.renderByCategory = () => {
                 if (i < maxProductsPerRow) {
                   return `
                     <li aria-label="${product.name}">
-                      <a href="/product.html?id=${product.id}">
+                      <a href="/product.html?id=${product.id}" aria-label="See product ${product.name}">
                         <img src="${product.image}" alt="${product.name}" role="img">
-                        <span>${product.name}</span>
-                        <span class="price" role="none">${product.price}</span>
-                        <span class="see-product">See product</span>
+                        <span aria-label="Product name">${product.name}</span>
+                        <span class="price" aria-label="Product price">${product.price}</span>
+                        <span class="see-product" aria-hidden="true">See product</span>
                       </a>
                     </li>
                   `
@@ -152,9 +152,9 @@ products.renderProductDetailsAndSuggestions = () => {
         <section class="product-details" aria-label="${product.name}">
           <img src="${product.image}" alt="${product.name}" role="img">
           <div class="info-container">
-            <h2 class="name">${product.name}</h2>
-            <span class="price" role="none">${product.price}</span>
-            <p class="description">${product.description || "No description available."}</p>
+            <h2 class="name" aria-label="Product name">${product.name}</h2>
+            <span class="price" aria-label="Product price">${product.price}</span>
+            <p class="description" aria-label="Product description">${product.description || "No description available."}</p>
           </div>
         </section>
       `)
@@ -165,11 +165,11 @@ products.renderProductDetailsAndSuggestions = () => {
     if (i < maxProductsPerRow) {
       listElement.innerHTML += `
         <li aria-label="${product.name}">
-          <a href="/product.html?id=${product.id}">
+          <a href="/product.html?id=${product.id}" aria-label="See product ${product.name}">
             <img src="${product.image}" alt="${product.name}" role="img">
-            <span>${product.name}</span>
-            <span class="price" role="none">${product.price}</span>
-            <span class="see-product">See product</span>
+            <span aria-label="Product name">${product.name}</span>
+            <span class="price" aria-label="Product price">${product.price}</span>
+            <span class="see-product" aria-hidden="true">See product</span>
           </a>
         </li>
       `
@@ -190,11 +190,11 @@ products.renderAllFromCategory = () => {
         <ul class="products-list" aria-label="Products">
           ${productsByCategory[category].map(product => `
             <li aria-label="${product.name}">
-              <a href="/product.html?id=${product.id}">
+              <a href="/product.html?id=${product.id}" aria-label="See product ${product.name}">
                 <img src="${product.image}" alt="${product.name}" role="img">
-                <span>${product.name}</span>
-                <span class="price" role="none">${product.price}</span>
-                <span class="see-product">See product</span>
+                <span aria-label="Product name">${product.name}</span>
+                <span class="price" aria-label="Product price">${product.price}</span>
+                <span class="see-product" aria-hidden="true">See product</span>
               </a>
             </li>
           `).join("")}
@@ -214,21 +214,21 @@ products.renderAll = () => {
         ${products.list.map(product => `
           <li aria-label="${product.name}">
             <div class="buttons-container" role="none">
-              <button type="button" aria-label="Delete" data-delete="${product.id}">
+              <button type="button" aria-label="Delete ${product.name}" data-delete="${product.id}">
                 <svg width="14" height="18" aria-label="Bin" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill="currentColor" d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM14 1H10.5L9.5 0H4.5L3.5 1H0V3H14V1Z"></path>
                 </svg>
               </button>
-              <button type="button" aria-label="Edit" data-edit="${product.id}">
+              <button type="button" aria-label="Edit ${product.name}" data-edit="${product.id}">
                 <svg width="18" height="18" aria-label="Pen" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fill="currentColor" d="M0 14.25V18H3.75L14.81 6.94L11.06 3.19L0 14.25ZM17.71 4.04C18.1 3.65 18.1 3.02 17.71 2.63L15.37 0.289998C14.98 -0.100002 14.35 -0.100002 13.96 0.289998L12.13 2.12L15.88 5.87L17.71 4.04Z"></path>
                 </svg>
               </button>
             </div>
             <img src="${product.image}" alt="${product.name}" role="img">
-            <span>${product.name}</span>
-            <span class="price" role="none">${product.price}</span>
-            <span>#${product.id}</span>
+            <span aria-label="Product name">${product.name}</span>
+            <span class="price" aria-label="Product price">${product.price}</span>
+            <span aria-label="Product id">#${product.id}</span>
           </li>
         `).join("")}
       </ul>

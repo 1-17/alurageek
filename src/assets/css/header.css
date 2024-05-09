@@ -37,12 +37,12 @@ header form.search button svg {
   height: 100%;
 }
 
-header form.search button svg path {
-  fill: var(--color-primary-lighter);
+header form.search button svg {
+  color: var(--color-primary-lighter);
 }
 
-header form.search button:hover svg path, header form.search button:focus-visible svg path {
-  fill: currentColor;
+header form.search button:hover svg, header form.search button:focus-visible svg {
+  color: currentColor;
   transition: fill var(--transition-time);
 }
 

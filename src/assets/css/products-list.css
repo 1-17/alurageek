@@ -64,16 +64,18 @@ ul.products-list.all-products div.buttons-container {
 }
 
 ul.products-list.all-products div.buttons-container * {
+  --shadow-offset: 2px;
   display: inline;
-  filter: drop-shadow(1px 1px 2px var(--color-danger-transparent));
+  filter: drop-shadow(1px 1px var(--shadow-offset) rgb(0, 0, 0, 0.15));
 }
 
 ul.products-list.all-products div.buttons-container *:not(:first-child) {
   margin-left: var(--spacing-sm);
 }
 
-ul.products-list.all-products div.buttons-container * path {
-  fill: var(--color-tertiary);
+ul.products-list.all-products div.buttons-container * svg {
+  margin-right: var(--shadow-offset);
+  color: var(--color-tertiary);
 }
 
 ul.products-list li {

@@ -1,7 +1,8 @@
 const isLoginPage = window.location.pathname.includes("login")
 const isLogged = !!localStorage.getItem("logged")
+const isPrivatePage = !isLoginPage && !isLogged
 
-if (!isLoginPage && !isLogged) {
+if (isPrivatePage) {
   window.location.replace("/")
 }
 

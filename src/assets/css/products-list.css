@@ -2,6 +2,10 @@ section.category-section:not(:first-child) {
   margin-top: var(--spacing-base);
 }
 
+section#search_container div.products-header {
+  margin-bottom: var(--spacing-sm);
+}
+
 div.products-header {
   display: flex;
   justify-content: space-between;

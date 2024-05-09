@@ -66,7 +66,6 @@ form.validations = {
       if (value) {
         return true
       }
-
       productImage.unmount()
       return "Product image URL is required."
     },
@@ -74,7 +73,6 @@ form.validations = {
       if (/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#= ]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//= ]*)/.test(value)) {
         return true
       }
-
       productImage.unmount()
       return "Product image URL is invalid. Please, insert a valid URL"
     },
@@ -121,7 +119,8 @@ form.validations = {
 form.submissions = {
   login: session.login,
   add_product: products.add,
-  edit_product: products.edit
+  edit_product: products.edit,
+  search_product: products.search
 }
 
 form.hintMessage.render = (field, message) => {

@@ -12,15 +12,18 @@ const products = {
   byCategory: undefined,
   urlId: Number(new URLSearchParams(window.location.search).get("id")),
   urlCategory: new URLSearchParams(window.location.search).get("category") || new URLSearchParams(window.location.search).get("name"),
+  urlSearch: new URLSearchParams(window.location.search).get("search"),
   productToUpdate: undefined,
   productHTML: undefined,
   add: undefined,
   edit: undefined,
   delete: undefined,
+  search: undefined,
   renderByCategory: undefined,
   renderProductDetailsAndSuggestions: undefined,
   renderAllFromCategory: undefined,
   renderAll: undefined,
+  renderSearch: undefined,
 }
 
 products.renderFallbackMessage = (message) => {
@@ -95,11 +98,16 @@ products.delete = (productId) => {
   window.location.reload()
 }
 
+products.search = (e) => {
+  const searchedTerm = form.data(e).search
+  window.location.href = `/search_product.html?search=${searchedTerm}`
+}
+
 products.renderByCategory = () => {
   const banner = document.querySelector("div#banner")
   const bannerButton = banner.querySelector("a#see_products")
 
-  if (!products.list?.length > 0) {
+  if (products.list && !products.list.length > 0) {
     banner.remove()
     products.renderFallbackMessage("No products to show yet.")
     return
@@ -139,7 +147,7 @@ products.renderByCategory = () => {
 }
 
 products.renderProductDetailsAndSuggestions = () => {
-  if (!products.urlId || !products.list.find(product => product.id === products.urlId)) {
+  if (!products.urlId || !products.urlCategory || !products.list.find(product => product.id === products.urlId)) {
     products.renderFallbackMessage("Product not found.")
   }
 
@@ -248,5 +256,55 @@ products.renderAll = () => {
   deleteButtons.forEach(button => button.addEventListener("click", () => products.delete(button.dataset.delete)))
 }
 
-const { productToUpdate, add, edit, renderByCategory, renderProductDetailsAndSuggestions, renderAllFromCategory, renderAll } = products
-export default { productToUpdate, add, edit, renderByCategory, renderProductDetailsAndSuggestions, renderAllFromCategory, renderAll }
+products.renderSearch = () => {
+  if (!products.urlSearch?.trim()) {
+    products.renderFallbackMessage("Search is empty. Please, insert a search value.")
+    return
+  }
+
+  products.container.innerHTML += `
+    <section id="search_container" class="category-section" aria-labelledby="search_title">
+      <div class="products-header">
+        <h2 id="search_title" class="products-category">Search results for '${products.urlSearch}'</h2>
+      </div>
+    </section>
+  `
+
+  products.container = document.querySelector("section#search_container")
+
+  const productsFound = []
+
+  for (const product of products.list) {
+    for (let value of Object.values(product)) {
+      value = value.toString().toLowerCase()
+      const searchValue = products.urlSearch.toLowerCase()
+
+      if (value.includes(searchValue)) {
+        productsFound.push(product)
+        break
+      }
+    }
+  }
+
+  if (!productsFound?.length > 0) {
+    products.renderFallbackMessage("No products found.")
+    return
+  }
+
+  products.container.innerHTML += `
+    <ul class="products-list" aria-label="Products">
+      ${productsFound.map(product => products.productHTML(product)).join("")}
+    </ul>
+  `
+}
+
+const {
+  productToUpdate,
+  add, edit, search,
+  renderByCategory, renderProductDetailsAndSuggestions, renderAllFromCategory, renderAll, renderSearch
+} = products
+export default {
+  productToUpdate,
+  add, edit, search,
+  renderByCategory, renderProductDetailsAndSuggestions, renderAllFromCategory, renderAll, renderSearch
+}

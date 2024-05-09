@@ -63,12 +63,16 @@ ul.products-list.all-products div.buttons-container {
   right: var(--offset);
 }
 
-ul.products-list.all-products div.buttons-container button:not(:first-child) {
+ul.products-list.all-products div.buttons-container * {
+  display: inline;
+}
+
+ul.products-list.all-products div.buttons-container *:not(:first-child) {
   margin-left: var(--spacing-sm);
 }
 
-ul.products-list.all-products div.buttons-container button path {
-  fill: var(--color-tertiary)
+ul.products-list.all-products div.buttons-container * path {
+  fill: var(--color-tertiary);
 }
 
 ul.products-list a /* for focus outline */ {

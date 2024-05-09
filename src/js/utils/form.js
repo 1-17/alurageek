@@ -5,11 +5,50 @@ const form = {
   validations: undefined,
   submissions: undefined,
   isValid: true,
+  hintMessage: {
+    id: "_hint_message",
+    element: undefined,
+    render: undefined,
+    unmount: undefined
+  },
   validate: undefined,
   data: undefined,
   submit: undefined,
+  initialPrice: "0.00",
+  formatPriceField: undefined,
   handle: undefined
 }
+
+const productImage = {
+  form: document.querySelector("form#add_product") || document.querySelector("form#edit_product"),
+  element: undefined,
+  render: undefined,
+  unmount: undefined
+}
+
+productImage.render = (imageURL) => {
+  if (!imageURL) {
+    throw new Error("Product Image Render: Missing image URL argument.")
+  }
+
+  if (typeof imageURL !== "string") {
+    throw new Error("Product Image Render: Invalid image URL argument. It must be a string.")
+  }
+  
+  if (productImage.form && !productImage.element) {
+    const fieldContainer = productImage.form.elements.product_image.parentElement
+    
+    if (!fieldContainer) {
+      throw new Error("Product Image Render: Field container not found.")
+    }
+
+    fieldContainer.insertAdjacentHTML("beforebegin", `
+      <img src="${imageURL}" alt="Product Preview" class="preview" role="img">
+    `)
+  }
+}
+
+productImage.unmount = () => productImage.element?.remove()
 
 form.validations = {
   email: {
@@ -22,28 +61,36 @@ form.validations = {
     maxLength: (value) => value.length <= 15 || "Password is too long. It must have max of 15 characters."
   },
   product_image: {
-    required: (value) => value || "Product image URL is required.",
-    pattern: (value) => /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#= ]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//= ]*)/.test(value) || "Product image URL is invalid. Please, insert a valid URL",
+    required: (value) => {
+      if (value) {
+        return true
+      }
+
+      productImage.unmount()
+      return "Product image URL is required."
+    },
+    pattern: (value) => {
+      if (/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#= ]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//= ]*)/.test(value)) {
+        return true
+      }
+
+      productImage.unmount()
+      return "Product image URL is invalid. Please, insert a valid URL"
+    },
     notFound: (value) => new Promise((resolve, reject) => {
       const image = new Image()
-      const imageElement = document.forms.add_product.querySelector("img")
-
+      image.src = value
+      
       image.onload = () => {
-        const field = document.forms.add_product.elements.product_image
-
-        !imageElement && field.parentElement.insertAdjacentHTML("beforebegin", `
-          <img src="${value}" alt="Product Preview" class="preview" role="img">
-        `)
-
+        productImage.render(value)
+        productImage.element = productImage.form.querySelector("img")
         resolve(true)
       }
 
       image.onerror = () => {
-        imageElement && imageElement.remove()
+        productImage.unmount()
         reject("Product image URL is invalid or the image is not available anymore.")
       }
-
-      image.src = value
     })
   },
   product_category: {
@@ -61,38 +108,42 @@ form.validations = {
   product_price: {
     required: (value) => value || "Product price is required.",
     pattern: (value) => /^[\d.,]+$/.test(value) || "Product price is wrong. It must have only numbers.",
-    minValue: (value) => value !== "0.00" || "Product price cannot be zero. Please, insert a price.",
+    minValue: (value) => value !== form.initialPrice || "Product price cannot be zero. Please, insert a price.",
     maxValue: (value) => value.length <= 12 || "Product price is too high. Please, insert a valid price.",
   }
 }
 
 form.submissions = {
   login: session.login,
-  add_product: products.add
+  add_product: products.add,
+  edit_product: products.edit
 }
 
-const renderHintMessage = (field, message) => {
-  const hintMessageId = `${field.name}_hint_message`
-  const hintMessage = document.querySelector(`p#${hintMessageId}`)
+form.hintMessage.render = (field, message) => {
+  let { id, element } = form.hintMessage
+  id = field.name + id
+  element = document.querySelector(`p#${id}`)
 
   form.isValid = false
 
-  if (!hintMessage) {
-    field.setAttribute("aria-describedby", hintMessageId)
-    field.parentElement.classList.add("warning")
+  if (!element) {
+    field.setAttribute("aria-describedby", id)
+    field.setCustomValidity(message)
     field.parentElement.insertAdjacentHTML("beforeend", `
-      <p id="${hintMessageId}" class="hint-message" role="alert" aria-label="${field.name.charAt(0).toUpperCase() + field.name.slice(1).replace("_", " ")} hint message" aria-live="polite" aria-assertive="true">${message}</p>
+      <p id="${id}" class="hint-message" role="alert" aria-label="${field.name.charAt(0).toUpperCase() + field.name.slice(1).replace("_", " ")} hint message" aria-live="polite" aria-assertive="true">${message}</p>
     `)
   }
 }
 
-const unmountHintMessage = (field) => {
-  const hintMessage = document.querySelector(`p#${field.name}_hint_message`)
+form.hintMessage.unmount = (field) => {
+  let { id, element } = form.hintMessage
+  id = field.name + id
+  element = document.querySelector(`p#${id}`)
 
-  if (hintMessage) {
+  if (element) {
     field.removeAttribute("aria-describedby")
-    hintMessage.parentElement.classList.remove("warning")
-    hintMessage.remove()
+    field.setCustomValidity("")
+    element.remove()
   }
 
   form.isValid = true
@@ -104,18 +155,18 @@ form.validate = (field) => {
       const validityCheck = validation(field.value)
       
       if (typeof validityCheck === "string" && validityCheck !== field.value) {
-        renderHintMessage(field, validityCheck)
+        form.hintMessage.render(field, validityCheck)
         break
       }
 
       if (validityCheck instanceof Promise) {
-        validityCheck.catch(message => renderHintMessage(field, message))
+        validityCheck.catch(message => form.hintMessage.render(field, message))
         break
       }
     }
   }
 
-  field.onfocus = () => unmountHintMessage(field)
+  field.onfocus = () => form.hintMessage.unmount(field)
 }
 
 form.data = (e) => {
@@ -123,7 +174,13 @@ form.data = (e) => {
   const dataObject = {}
 
   for (const [key, value] of data.entries()) {
-    dataObject[key] = value
+    const keyToRemove = "product_"
+
+    if (key.includes(keyToRemove)) {
+      dataObject[key.replace(keyToRemove, "")] = value
+    } else {
+      dataObject[key] = value
+    }
   }
 
   return dataObject
@@ -138,7 +195,11 @@ form.submit = (e) => {
   const { id, elements } = e.target
 
   if (!id) {
-    throw new Error("Form: Missing id attribute.")
+    throw new Error("Form Submit: Missing id attribute.")
+  }
+
+  if (!elements?.length > 0) {
+    throw new Error("Form Submit: Missing elements.")
   }
   
   for (const element of elements) {
@@ -147,11 +208,37 @@ form.submit = (e) => {
 
   if (form.isValid) {
     if (!form.submissions[id]) {
-      throw new Error(`Form '${id}': Missing submission function.`)
+      throw new Error(`Form Submit '${id}': Missing submission function.`)
     }
 
     form.submissions[id](e)
   }
+}
+
+form.formatPriceField = (field) => {
+  if (!field) {
+    throw new Error("Form Format Price Field: Missing field argument.")
+  }
+
+  if (field.form.id !== "edit_product") {
+    field.value = form.initialPrice
+  }
+
+  field.addEventListener("input", (e) => {
+    const value = e.target.value
+
+    if (value) {
+      const cursorPosition = e.target.selectionStart
+      const cleanedInput = value.replace(/\D/g, '')
+      let valueAsPrice = (parseInt(cleanedInput, 10) / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+
+      e.target.value = valueAsPrice
+      e.target.setSelectionRange(cursorPosition, cursorPosition)
+      return
+    }
+
+    e.target.value = form.initialPrice
+  })
 }
 
 form.handle = () => {
@@ -161,30 +248,39 @@ form.handle = () => {
   
     for (const element of formElement.elements) {
       if (element.name) {
-        element.value = ""
+        if (formElement.id !== "edit_product" && element.value) {
+          element.value = ""
+        }
+        
         !element.placeholder && (element.placeholder = "")
         element.autocomplete = "off"
         element.ariaAutoComplete = "none"
 
+        if (formElement.id === "edit_product") {
+          let previewImage
+
+          for (const [key, value] of products.productToUpdate) {
+            if (key.includes("image")) {
+              previewImage = value
+            }
+
+            if (element.name.includes(key)) {
+              element.value = value
+            }
+          }
+
+          if (element.name.includes("image")) {
+            productImage.render(previewImage)
+            productImage.element = formElement.querySelector("img")
+          }
+        }
+
+        if (element.name === "product_price") {
+          form.formatPriceField(element)
+        }
+
         if (form.validations[element.name]) {
           element.addEventListener("blur", () => form.validate(element))
-        }
-  
-        if (element.name === "product_price") {
-          element.value = "0.00"
-
-          element.addEventListener("input", (e) => {
-            const value = e.target.value
-
-            if (value.trim()) {
-              const cursorPosition = e.target.selectionStart
-              const cleanedInput = value.replace(/\D/g, '')
-              let valueAsPrice = (parseInt(cleanedInput, 10) / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  
-              e.target.value = valueAsPrice
-              e.target.setSelectionRange(cursorPosition, cursorPosition)
-            }
-          })
         }
       }
     }

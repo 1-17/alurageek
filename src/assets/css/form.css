@@ -43,10 +43,6 @@ div.field-container:not(:first-of-type) {
   margin-top: var(--spacing-xs);
 }
 
-div.field-container.warning input, div.field-container.warning textarea {
-  border-color: var(--color-danger);
-}
-
 label {
   color: var(--color-primary-lighter);
 }
@@ -87,6 +83,10 @@ textarea:not(:placeholder-shown) + label {
   font-size: var(--font-sm);
   top: calc(var(--field-padding-y) - var(--field-border-size));
   transition: top var(--transition-time);
+}
+
+input:invalid, textarea:invalid {
+  border-color: var(--color-danger);
 }
 
 p.hint-message {

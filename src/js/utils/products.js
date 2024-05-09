@@ -4,6 +4,7 @@ import form from "./form.js"
 const products = {
   key: "products",
   container: document.querySelector("main"),
+  placeholderImage: "src/assets/img/placeholder.svg",
   renderFallbackMessage: undefined,
   maxPerRow: 6,
   get: undefined,
@@ -53,12 +54,12 @@ products.get = () => {
 }
 
 products.get()
-products.byCategory = Object.groupBy(products.list, ({ category }) => category)
+products.byCategory = products.list && Object.groupBy(products.list, ({ category }) => category)
 products.productToUpdate = products.urlId && Object.entries(products.list.find(product => product.id === products.urlId))
 products.productHTML = (product) => `
   <li aria-label="${product.name}">
     <a href="/product.html?id=${product.id}&category=${product.category}" aria-label="See product ${product.name}">
-      <img src="${product.image}" alt="${product.name}" role="img">
+      <img src="${product.image || products.placeholderImage}" alt="${product.name}" role="img">
       <span aria-label="Product name">${product.name}</span>
       <span class="price" aria-label="Product price">${product.price}</span>
       <span class="see-product" aria-hidden="true">See product</span>
@@ -161,7 +162,7 @@ products.renderProductDetailsAndSuggestions = () => {
 
       products.container.insertAdjacentHTML("afterbegin", `
         <section class="product-details" aria-label="${product.name}">
-          <img src="${product.image}" alt="${product.name}" role="img">
+          <img src="${product.image || products.placeholderImage}" alt="${product.name}" role="img">
           <div class="info-container">
             <h2 class="name" aria-label="Product name">${product.name}</h2>
             <span class="price" aria-label="Product price">${product.price}</span>
@@ -234,7 +235,7 @@ products.renderAll = () => {
               </svg>
             </a>
           </div>
-          <img src="${product.image}" alt="${product.name}" role="img">
+          <img src="${product.image || products.placeholderImage}" alt="${product.name}" role="img">
           <span aria-label="Product name">${product.name}</span>
           <span class="price" aria-label="Product price">${product.price}</span>
           <span aria-label="Product id">#${product.id}</span>

@@ -65,6 +65,7 @@ ul.products-list.all-products div.buttons-container {
 
 ul.products-list.all-products div.buttons-container * {
   display: inline;
+  filter: drop-shadow(1px 1px 2px var(--color-danger-transparent));
 }
 
 ul.products-list.all-products div.buttons-container *:not(:first-child) {
@@ -73,6 +74,16 @@ ul.products-list.all-products div.buttons-container *:not(:first-child) {
 
 ul.products-list.all-products div.buttons-container * path {
   fill: var(--color-tertiary);
+}
+
+ul.products-list li {
+  overflow: hidden;
+}
+
+ul.products-list li * {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 ul.products-list a /* for focus outline */ {

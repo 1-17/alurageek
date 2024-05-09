@@ -53,11 +53,12 @@ productImage.unmount = () => productImage.element?.remove()
 form.validations = {
   email: {
     required: (value) => value || "Email is required.",
-    pattern: (value) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value) || "Email format is wrong. Please, insert a valid email."
+    pattern: (value) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value) || "Email format is wrong. Please, insert a valid email.",
+    maxLength: (value) => value.length <= 120 || "Email is too long. It must have max of 120 characters."
   },
   password: {
     required: (value) => value || "Password is required.",
-    minLength: (value) => value.length >= 6 || "Password is too short. It must have at least 6 characters.",
+    minLength: (value) => value.length >= 6 || "Password is too short. It must have min of 6 characters.",
     maxLength: (value) => value.length <= 15 || "Password is too long. It must have max of 15 characters."
   },
   product_image: {
@@ -97,13 +98,17 @@ form.validations = {
     required: (value) => value.trim() !== "" || "Product category is required.",
     pattern: (value) => /^[a-zA-ZÀ-ÿ-'\s\d]+$/.test(value) || "Product category is invalid. It must have only letters, numbers, hyphens (-) and apostrophes (').",
     noHyphenOnStart: (value) => !value.startsWith("-") || "Product category is invalid. It cannot start with an hyphen (-).",
-    noApostropheOnStart: (value) => !value.startsWith("'") || "Product category is invalid. It cannot start with an apostrophe (')."
+    noApostropheOnStart: (value) => !value.startsWith("'") || "Product category is invalid. It cannot start with an apostrophe (').",
+    minValue: (value) => value.length >= 3 || "Product category is too short. It must have min of 3 characters.",
+    maxValue: (value) => value.length <= 30 || "Product category is too long. It must have max of 30 characters."
   },
   product_name: {
     required: (value) => value.trim() !== "" || "Product name is required.",
     pattern: (value) => /^[a-zA-ZÀ-ÿ-'\s\d]+$/.test(value) || "Product name is invalid. It must have only letters, numbers, hyphens (-) and apostrophes (').",
     noHyphenOnStart: (value) => !value.startsWith("-") || "Product name is invalid. It cannot start with an hyphen (-).",
-    noApostropheOnStart: (value) => !value.startsWith("'") || "Product name is invalid. It cannot start with an apostrophe (')."
+    noApostropheOnStart: (value) => !value.startsWith("'") || "Product name is invalid. It cannot start with an apostrophe (').",
+    minValue: (value) => value.length >= 3 || "Product name is too short. It must have min of 3 characters.",
+    maxValue: (value) => value.length <= 160 || "Product name is too long. It must have max of 160 characters."
   },
   product_price: {
     required: (value) => value || "Product price is required.",

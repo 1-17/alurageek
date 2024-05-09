@@ -113,14 +113,24 @@ form.validations = {
     pattern: (value) => /^[\d.,]+$/.test(value) || "Product price is wrong. It must have only numbers.",
     minValue: (value) => value !== form.initialPrice || "Product price cannot be zero. Please, insert a price.",
     maxValue: (value) => value.length <= 12 || "Product price is too high. Please, insert a valid price.",
-  }
+  },
+  contact_name: {
+    required: (value) => value.trim() !== "" || "Name is required.",
+    pattern: (value) => /^[a-zA-ZÀ-ÿ'\s]+$/.test(value) || "Name is invalid. It must have only letters and apostrophes(').",
+    maxValue: (value) => value.length <= 100 || "Name is too long. It must have max of 100 characters."
+  },
+  contact_message: {
+    required: (value) => value.trim() !== "" || "Message is required.",
+    maxValue: (value) => value.length <= 1000 || "Message is too long. It must have max of 1000 characters."
+  },
 }
 
 form.submissions = {
   login: session.login,
   add_product: products.add,
   edit_product: products.edit,
-  search_product: products.search
+  search_product: products.search,
+  contact_us: (e) => console.table(form.data(e))
 }
 
 form.hintMessage.render = (field, message) => {
@@ -178,10 +188,13 @@ form.data = (e) => {
   const dataObject = {}
 
   for (const [key, value] of data.entries()) {
-    const keyToRemove = "product_"
+    const productKey = "product_"
+    const contactKey = "contact_"
 
-    if (key.includes(keyToRemove)) {
-      dataObject[key.replace(keyToRemove, "")] = value
+    if (key.includes(productKey)) {
+      dataObject[key.replace(productKey, "")] = value
+    } else if (key.includes(contactKey)) {
+      dataObject[key.replace(contactKey, "")] = value
     } else {
       dataObject[key] = value
     }

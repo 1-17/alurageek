@@ -3,9 +3,9 @@ const isLogged = !!localStorage.getItem("logged")
 const isPrivatePage = !isLoginPage && !isLogged
 
 if (isPrivatePage) {
-  window.location.replace("/")
+  window.location.replace("alurageek")
 }
 
 if (isLoginPage && isLogged) {
-  window.location.replace("products")
+  window.location.replace("alurageek/products")
 }

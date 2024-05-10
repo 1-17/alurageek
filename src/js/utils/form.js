@@ -122,7 +122,7 @@ form.validations = {
   contact_message: {
     required: (value) => value.trim() !== "" || "Message is required.",
     maxValue: (value) => value.length <= 1000 || "Message is too long. It must have max of 1000 characters."
-  },
+  }
 }
 
 form.submissions = {
@@ -205,7 +205,7 @@ form.data = (e) => {
         break
     }
   }
-  
+
   formattedData.price = formattedData.price.replace("$ ", "")
   
   return formattedData

@@ -7,5 +7,5 @@ if (isPrivatePage) {
 }
 
 if (isLoginPage && isLogged) {
-  window.location.replace("/products.html")
+  window.location.replace("products")
 }

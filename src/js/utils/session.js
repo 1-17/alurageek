@@ -7,7 +7,7 @@ const session = {
 
 session.login = () => {
   localStorage.setItem(session.key, true)
-  window.location.replace("/products.html")
+  window.location.replace("products")
 }
 
 session.logout = () => localStorage.removeItem(session.key)

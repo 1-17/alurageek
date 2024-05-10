@@ -1,4 +1,4 @@
-const searchbar = () => {
+const handleResponsiveSearchbar = () => {
   const elementsToToggle = [document.querySelector("form#search_product"), document.querySelector("a#nav_button") || {}]
   const searchToggleButton = document.querySelector("button#searchbar_toggler")
 
@@ -34,4 +34,4 @@ const searchbar = () => {
   }))
 }
 
-export default searchbar
+export default handleResponsiveSearchbar

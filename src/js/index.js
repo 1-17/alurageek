@@ -1,7 +1,7 @@
-import searchbar from "./utils/searchbar.js"
+import handleResponsiveSearchbar from "./utils/handleResponsiveSearchbar.js"
 import form from "./utils/form.js"
 
 document.addEventListener("DOMContentLoaded", () => {
-  searchbar()
+  handleResponsiveSearchbar()
   form.handle()
 })

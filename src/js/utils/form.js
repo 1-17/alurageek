@@ -205,9 +205,8 @@ form.data = (e) => {
         break
     }
   }
-
-  const valueAsPrice = formattedData.price.replace("$ ", "")
-  formattedData.price = valueAsPrice
+  
+  formattedData.price = formattedData.price.replace("$ ", "")
   
   return formattedData
 }
@@ -283,6 +282,11 @@ form.handle = () => {
         element.ariaAutoComplete = "none"
 
         if (formElement.id === "edit_product") {
+          if (!products.productToUpdate) {
+            window.history.back()
+            return
+          }
+
           let previewImage
 
           for (const [key, value] of products.productToUpdate) {

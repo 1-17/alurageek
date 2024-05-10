@@ -6,6 +6,7 @@ const products = {
   container: document.querySelector("main"),
   placeholderImage: "src/assets/img/placeholder.svg",
   renderFallbackMessage: undefined,
+  isFallbackMessageRendered: false,
   maxPerRow: 6,
   get: undefined,
   list: undefined,
@@ -26,12 +27,20 @@ const products = {
   renderSearch: undefined,
 }
 
-products.renderFallbackMessage = (message) => {
+products.renderFallbackMessage = (message, position) => {
   if (!message?.trim()) {
     throw new Error("Render Fallback Component: Missing message.")
   }
 
-  products.container.innerHTML += `<p class="products-list-fallback">${message}</p>`
+  products.isFallbackMessageRendered = true
+  const htmlMessage = `<p class="fallback-message">${message}</p>`
+
+  if (position) {
+    products.container.insertAdjacentHTML(position, htmlMessage)
+    return
+  }
+
+  products.container.innerHTML += htmlMessage
 }
 
 products.get = () => {
@@ -58,10 +67,10 @@ products.get = () => {
 
 products.get()
 products.byCategory = products.list && Object.groupBy(products.list, ({ category }) => category)
-products.productToUpdate = products.urlId && Object.entries(products.list.find(product => product.id === products.urlId))
+products.productToUpdate = (products.list && products.urlId && window.location.href.includes("edit_product")) && Object.entries(products.list.find(product => product.id === products.urlId))
 products.productHTML = (product) => `
   <li aria-label="${product.name}">
-    <a href="/product.html?id=${product.id}&category=${product.category}" aria-label="See product ${product.name}">
+    <a href="/product.html?id=${product.id}" aria-label="See product ${product.name}">
       <img src="${product.image || products.placeholderImage}" alt="${product.name}" role="img">
       <span aria-label="Product name">${product.name}</span>
       <span class="price" aria-label="Product price">${product.price}</span>
@@ -71,22 +80,52 @@ products.productHTML = (product) => `
 `
 
 products.add = (e) => {
-  const newProduct = {
-    id: Math.max(...products.list.map(product => product.id)) + 1,
-    ...form.data(e)
+  const formData = form.data(e)
+  const productsIds = []
+
+  for (const { id, name, category } of products.list) {
+    const productAlreadyExists = name === formData.name && category === formData.category
+
+    if (productAlreadyExists) {
+      products.container = document.querySelector("form#add_product button")
+      
+      if (!products.isFallbackMessageRendered) {
+        products.renderFallbackMessage("Product already exists with same name and category.", "beforebegin")
+      }
+      return
+    }
+
+    productsIds.push(id)
   }
 
+  const newProduct = { id: Math.max(...productsIds) + 1, ...formData }
   localStorage.setItem(products.key, JSON.stringify([newProduct, ...products.list]))
   window.location.href = "/products.html"
 }
 
 products.edit = (e) => {
-  const listWithUpdatedProduct = products.list.map(product => {
-    if (product.id === products.urlId) {
-      return { id: product.id, ...form.data(e) }
+  const listWithUpdatedProduct = []
+
+  for (let { id, ...product } of products.list) {
+    const formData = form.data(e)
+    let isProductEdited
+
+    if (id === products.urlId) {
+      isProductEdited = JSON.stringify(product) === JSON.stringify(formData)
+      product = { id, ...formData }
     }
-    return product
-  })
+    
+    if (isProductEdited) {
+      products.container = document.querySelector("form#edit_product button")
+
+      if (!products.isFallbackMessageRendered) {
+        products.renderFallbackMessage("Product was not edited since it has no changes.", "beforebegin")
+      }
+      return
+    }
+    
+    listWithUpdatedProduct.push({ id, ...product })
+  }
   
   localStorage.setItem(products.key, JSON.stringify(listWithUpdatedProduct))
   window.location.href = "/products.html"
@@ -107,7 +146,12 @@ products.renderByCategory = () => {
   const banner = document.querySelector("div#banner")
   const bannerButton = banner.querySelector("a#see_products")
 
-  if (products.list && !products.list.length > 0) {
+  if (!products.list || !products.byCategory) {
+    banner.remove()
+    return
+  }
+
+  if (!products.list.length > 0) {
     banner.remove()
     products.renderFallbackMessage("No products to show yet.")
     return
@@ -147,67 +191,82 @@ products.renderByCategory = () => {
 }
 
 products.renderProductDetailsAndSuggestions = () => {
-  if (!products.urlId || !products.urlCategory || !products.list.find(product => product.id === products.urlId)) {
+  if (!products.list || !products.byCategory) {
+    return
+  }
+
+  const detailedProduct = products.list.find(product => product.id === products.urlId)
+  const similarProducts = []
+  
+  if (!products.urlId || !detailedProduct) {
     products.renderFallbackMessage("Product not found.")
   }
 
-  /* Similar Products container rendering */
-  if (products.list?.length > 1 && products.urlCategory) {
+  /* Product details rendering */
+  if (detailedProduct) {
+    setPageTitle(detailedProduct.name)
+
+    products.container.insertAdjacentHTML("afterbegin", `
+      <section class="product-details" aria-label="${detailedProduct.name}">
+        <img src="${detailedProduct.image || products.placeholderImage}" alt="${detailedProduct.name}" role="img">
+        <div class="info-container">
+          <h2 class="name" aria-label="Product name">${detailedProduct.name}</h2>
+          <span class="price" aria-label="Product price">${detailedProduct.price}</span>
+          <p class="description" aria-label="Product description">${detailedProduct.description || "No description available."}</p>
+        </div>
+      </section>
+    `)
+
+    /* Getting similar products from same category as detailed product */
+    for (const product of products.byCategory[detailedProduct.category]) {
+      const i = products.byCategory[detailedProduct.category].indexOf(product)
+  
+      if (product !== detailedProduct && i < products.maxPerRow) {
+        similarProducts.push(product)
+      }
+    }
+  }
+
+  /* Adding more similar products from any categories until row is filled */
+  const isRowNotFilled = similarProducts.length < products.maxPerRow
+  const quantityToFillRow = products.maxPerRow - similarProducts.length
+
+  if (isRowNotFilled) {
+    for (const product of products.list) {
+      const i = products.list.indexOf(product)
+
+      if (i < quantityToFillRow) {
+        similarProducts.push(product)
+      }
+    }
+  }
+
+  /* Similar products rendering */
+  if (products.list.length > 1) {
     products.container.innerHTML += `
       <section class="similar-products" aria-labelledby="similar_products">
         <h2 id="similar_products">Similar Products</h2>
-        <ul id="products_list" class="products-list" aria-labelledby="similar_products"></ul>
+        <ul id="products_list" class="products-list" aria-labelledby="similar_products">
+          ${similarProducts.map(product => products.productHTML(product)).join("")}
+        </ul>
       </section>
     `
-  }
-  
-  const listElement = document.querySelector("ul#products_list")
-  
-  /* Product details rendering */
-  products.byCategory[products.urlCategory].map((product, i) => {
-    if (product.id === products.urlId) {
-      setPageTitle(product.name)
-
-      products.container.insertAdjacentHTML("afterbegin", `
-        <section class="product-details" aria-label="${product.name}">
-          <img src="${product.image || products.placeholderImage}" alt="${product.name}" role="img">
-          <div class="info-container">
-            <h2 class="name" aria-label="Product name">${product.name}</h2>
-            <span class="price" aria-label="Product price">${product.price}</span>
-            <p class="description" aria-label="Product description">${product.description || "No description available."}</p>
-          </div>
-        </section>
-      `)
-      return
-    }
-
-    /* Similar products without detailed product */
-    if (i < products.maxPerRow && listElement) {
-      listElement.innerHTML += products.productHTML(product)
-    }
-  })
-
-  /* Filling Similar Products row if not enough products with newest products */
-  const notEnoughProductsPerRow = listElement?.childElementCount < products.maxPerRow
-  const missingProductsQuantity = products.maxPerRow - listElement?.childElementCount
-  const productsFromOtherCategories = products.list.filter(product => product.category !== products.urlCategory)
-
-  if (notEnoughProductsPerRow && productsFromOtherCategories?.length > 0) {
-    productsFromOtherCategories.map((product, i) => {
-      if (i < missingProductsQuantity) {
-        listElement?.insertAdjacentHTML("beforeend", products.productHTML(product))
-      }
-    })
   }
 }
 
 products.renderAllFromCategory = () => {
-  setPageTitle(products.urlCategory)
+  if (!products.byCategory) {
+    return
+  }
 
-  if (!products.byCategory[products.urlCategory]?.length > 0) {
+  const productsByCategory = products.byCategory[products.urlCategory]
+
+  if (!productsByCategory?.length > 0) {
     products.renderFallbackMessage("Category does not exist, so no products to show.")
     return
   }
+
+  setPageTitle(products.urlCategory)
 
   products.container.innerHTML += `
     <section class="category-section" aria-label="${products.urlCategory} products">
@@ -215,14 +274,18 @@ products.renderAllFromCategory = () => {
         <h2 class="products-category">${products.urlCategory}</h2>
       </div>
       <ul class="products-list" aria-label="Products">
-        ${products.byCategory[products.urlCategory].map(product => products.productHTML(product)).join("")}
+        ${productsByCategory.map(product => products.productHTML(product)).join("")}
       </ul>
     </section>
   `
 }
 
 products.renderAll = () => {
-  if (!products.list?.length > 0) {
+  if (!products.list) {
+    return
+  }
+
+  if (!products.list.length > 0) {
     products.renderFallbackMessage("No products to show yet.")
     return
   }
@@ -257,6 +320,10 @@ products.renderAll = () => {
 }
 
 products.renderSearch = () => {
+  if (!products.list) {
+    return
+  }
+
   if (!products.urlSearch?.trim()) {
     products.renderFallbackMessage("Search is empty. Please, insert a search value.")
     return
@@ -269,8 +336,6 @@ products.renderSearch = () => {
       </div>
     </section>
   `
-
-  products.container = document.querySelector("section#search_container")
 
   const productsFound = []
 
@@ -286,11 +351,12 @@ products.renderSearch = () => {
     }
   }
 
-  if (!productsFound?.length > 0) {
+  if (!productsFound.length > 0) {
     products.renderFallbackMessage("No products found.")
     return
   }
 
+  products.container = document.querySelector("section#search_container")
   products.container.innerHTML += `
     <ul class="products-list" aria-label="Products">
       ${productsFound.map(product => products.productHTML(product)).join("")}

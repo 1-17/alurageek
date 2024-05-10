@@ -15,6 +15,7 @@ const products = {
   urlCategory: new URLSearchParams(window.location.search).get("category") || new URLSearchParams(window.location.search).get("name"),
   urlSearch: new URLSearchParams(window.location.search).get("search"),
   productToUpdate: undefined,
+  formatToPrice: undefined,
   productHTML: undefined,
   add: undefined,
   edit: undefined,
@@ -66,18 +67,35 @@ products.get = () => {
 }
 
 products.get()
+
 products.byCategory = products.list && Object.groupBy(products.list, ({ category }) => category)
-products.productToUpdate = (products.list && products.urlId && window.location.href.includes("edit_product")) && Object.entries(products.list.find(product => product.id === products.urlId))
-products.productHTML = (product) => `
-  <li aria-label="${product.name}">
-    <a href="/product.html?id=${product.id}" aria-label="See product ${product.name}">
-      <img src="${product.image || products.placeholderImage}" alt="${product.name}" role="img">
-      <span aria-label="Product name">${product.name}</span>
-      <span class="price" aria-label="Product price">${product.price}</span>
-      <span class="see-product" aria-hidden="true">See product</span>
-    </a>
-  </li>
-`
+
+products.productToUpdate = (products.list && products.urlId && window.location.href.includes("edit_product")) && (
+  Object.entries(products.list.find(product => product.id === products.urlId))
+)
+
+products.formatToPrice = (price) => {
+  if (!price) {
+    throw new Error("Format To Price: Missing price argument.")
+  }
+
+  price = parseFloat(price).toLocaleString("en-US", { style: "currency", currency: "USD" })
+
+  return price
+}
+
+products.productHTML = (product) => {
+  return `
+    <li aria-label="${product.name}">
+      <a href="/product.html?id=${product.id}" aria-label="See product ${product.name}">
+        <img src="${product.image || products.placeholderImage}" alt="${product.name}" role="img">
+        <span aria-label="Product name">${product.name}</span>
+        <span class="price" aria-label="Product price">${products.formatToPrice(product.price)}</span>
+        <span class="see-product" aria-hidden="true">See product</span>
+      </a>
+    </li>
+  `
+}
 
 products.add = (e) => {
   const formData = form.data(e)
@@ -211,7 +229,7 @@ products.renderProductDetailsAndSuggestions = () => {
         <img src="${detailedProduct.image || products.placeholderImage}" alt="${detailedProduct.name}" role="img">
         <div class="info-container">
           <h2 class="name" aria-label="Product name">${detailedProduct.name}</h2>
-          <span class="price" aria-label="Product price">${detailedProduct.price}</span>
+          <span class="price" aria-label="Product price">${products.formatToPrice(detailedProduct.price)}</span>
           <p class="description" aria-label="Product description">${detailedProduct.description || "No description available."}</p>
         </div>
       </section>
@@ -308,7 +326,7 @@ products.renderAll = () => {
           </div>
           <img src="${product.image || products.placeholderImage}" alt="${product.name}" role="img">
           <span aria-label="Product name">${product.name}</span>
-          <span class="price" aria-label="Product price">${product.price}</span>
+          <span class="price" aria-label="Product price">${products.formatToPrice(product.price)}</span>
           <span aria-label="Product id">#${product.id}</span>
         </li>
       `).join("")}

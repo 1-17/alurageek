@@ -14,7 +14,7 @@ const form = {
   validate: undefined,
   data: undefined,
   submit: undefined,
-  initialPrice: "0.00",
+  initialPrice: "$ 0.00",
   formatPriceField: undefined,
   handle: undefined
 }
@@ -110,7 +110,7 @@ form.validations = {
   },
   product_price: {
     required: (value) => value || "Product price is required.",
-    pattern: (value) => /^[\d.,]+$/.test(value) || "Product price is wrong. It must have only numbers.",
+    pattern: (value) => /^[\$\s\d,.]+$/.test(value) || "Product price is wrong. It must have only numbers.",
     minValue: (value) => value !== form.initialPrice || "Product price cannot be zero. Please, insert a price.",
     maxValue: (value) => value.length <= 12 || "Product price is too high. Please, insert a valid price.",
   },
@@ -185,22 +185,31 @@ form.validate = (field) => {
 
 form.data = (e) => {
   const data = new FormData(e.target)
-  const dataObject = {}
+  const formattedData = {}
 
   for (const [key, value] of data.entries()) {
     const productKey = "product_"
     const contactKey = "contact_"
 
-    if (key.includes(productKey)) {
-      dataObject[key.replace(productKey, "")] = value
-    } else if (key.includes(contactKey)) {
-      dataObject[key.replace(contactKey, "")] = value
-    } else {
-      dataObject[key] = value
+    switch (true) {
+      case key.includes(productKey):
+        formattedData[key.replace(productKey, "")] = value
+        break
+      
+      case key.includes(contactKey):
+        formattedData[key.replace(contactKey, "")] = value
+        break
+    
+      default:
+        formattedData[key] = value
+        break
     }
   }
 
-  return dataObject
+  const valueAsPrice = formattedData.price.replace("$ ", "")
+  formattedData.price = valueAsPrice
+  
+  return formattedData
 }
 
 form.submit = (e) => {
@@ -246,10 +255,10 @@ form.formatPriceField = (field) => {
 
     if (value) {
       const cursorPosition = e.target.selectionStart
-      const cleanedInput = value.replace(/\D/g, '')
+      const cleanedInput = value.replace(/\D/g, "")
       let valueAsPrice = (parseInt(cleanedInput, 10) / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-
-      e.target.value = valueAsPrice
+      
+      e.target.value = `$ ${valueAsPrice}`
       e.target.setSelectionRange(cursorPosition, cursorPosition)
       return
     }

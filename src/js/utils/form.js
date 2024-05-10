@@ -206,7 +206,9 @@ form.data = (e) => {
     }
   }
 
-  formattedData.price = formattedData.price.replace("$ ", "")
+  if (formattedData.price) {
+    formattedData.price = formattedData.price.replace("$ ", "")
+  }
   
   return formattedData
 }

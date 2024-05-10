@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (session.isLogged) {
     navButton.innerHTML = "Admin menu"
-    navButton.href = "alurageek/products"
+    navButton.href = "/alurageek/products"
   }
 
   products.renderByCategory()

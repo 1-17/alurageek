@@ -70,14 +70,16 @@ products.get()
 
 products.byCategory = products.list && Object.groupBy(products.list, ({ category }) => category)
 
+const editProductForm = document.querySelector("form#edit_product")
+
 products.productToUpdate = (
-  products.urlId
-  && window.location.href.includes("edit_product")
+  editProductForm
+  && products.urlId
   && products.list?.find(product => product.id === products.urlId)
 ) && Object.entries(products.list.find(product => product.id === products.urlId))
 
-if (!products.productToUpdate) {
-  document.querySelector("form#edit_product")?.remove()
+if (editProductForm && !products.productToUpdate) {
+  editProductForm.remove()
   products.renderFallbackMessage("Product to edit is not found.")
 }
 

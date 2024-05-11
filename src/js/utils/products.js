@@ -77,7 +77,7 @@ products.productToUpdate = (
 ) && Object.entries(products.list.find(product => product.id === products.urlId))
 
 if (!products.productToUpdate) {
-  document.querySelector("form#edit_product").remove()
+  document.querySelector("form#edit_product")?.remove()
   products.renderFallbackMessage("Product to edit is not found.")
 }
 

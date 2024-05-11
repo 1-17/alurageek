@@ -70,9 +70,16 @@ products.get()
 
 products.byCategory = products.list && Object.groupBy(products.list, ({ category }) => category)
 
-products.productToUpdate = (products.list && products.urlId && window.location.href.includes("edit_product")) && (
-  Object.entries(products.list.find(product => product.id === products.urlId))
-)
+products.productToUpdate = (
+  products.urlId
+  && window.location.href.includes("edit_product")
+  && products.list?.find(product => product.id === products.urlId)
+) && Object.entries(products.list.find(product => product.id === products.urlId))
+
+if (!products.productToUpdate) {
+  document.querySelector("form#edit_product").remove()
+  products.renderFallbackMessage("Product to edit is not found.")
+}
 
 products.formatToPrice = (price) => {
   if (!price) {
@@ -181,12 +188,12 @@ products.renderByCategory = () => {
     return category.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[\s']+/g, "_").toLowerCase()
   }
 
-  for (const [category, categoryProducts] of Object.entries(products.byCategory)) {
-    if (!bannerButton.textContent.includes(category)) {
-      bannerButton.href = `#${formattedCategory(newBannerButtonCategory)}`
-      bannerButton.textContent = bannerButton.textContent.replace("Consoles", newBannerButtonCategory)
-    }
+  if (!products.byCategory[bannerButton.textContent.replace("See ", "")]) {
+    bannerButton.href = `#${formattedCategory(newBannerButtonCategory)}`
+    bannerButton.textContent = bannerButton.textContent.replace("Consoles", newBannerButtonCategory)
+  }
 
+  for (const [category, categoryProducts] of Object.entries(products.byCategory)) {
     if (products.byCategory[category].length > 0) {
       products.container.innerHTML += `
         <section id="${formattedCategory(category)}" class="category-section" aria-label="${category} products">
@@ -239,7 +246,7 @@ products.renderProductDetailsAndSuggestions = () => {
     for (const product of products.byCategory[detailedProduct.category]) {
       const i = products.byCategory[detailedProduct.category].indexOf(product)
   
-      if (product !== detailedProduct && i < products.maxPerRow) {
+      if (product !== detailedProduct && i <= products.maxPerRow) {
         similarProducts.push(product)
       }
     }
@@ -253,7 +260,7 @@ products.renderProductDetailsAndSuggestions = () => {
     for (const product of products.list) {
       const i = products.list.indexOf(product)
 
-      if (i < quantityToFillRow) {
+      if (product.category !== detailedProduct.category && i < quantityToFillRow) {
         similarProducts.push(product)
       }
     }
@@ -358,13 +365,15 @@ products.renderSearch = () => {
   const productsFound = []
 
   for (const product of products.list) {
-    for (let value of Object.values(product)) {
-      value = value.toString().toLowerCase()
-      const searchValue = products.urlSearch.toLowerCase()
+    for (let [key, value] of Object.entries(product)) {
+      if (!key.includes("image")) {
+        value = value.toString().toLowerCase()
+        const searchValue = products.urlSearch.toLowerCase()
 
-      if (value.includes(searchValue)) {
-        productsFound.push(product)
-        break
+        if (value.includes(searchValue)) {
+          productsFound.push(product)
+          break
+        }
       }
     }
   }

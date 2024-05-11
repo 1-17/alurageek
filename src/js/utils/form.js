@@ -284,11 +284,6 @@ form.handle = () => {
         element.ariaAutoComplete = "none"
 
         if (formElement.id === "edit_product") {
-          if (!products.productToUpdate) {
-            window.history.back()
-            return
-          }
-
           let previewImage
 
           for (const [key, value] of products.productToUpdate) {

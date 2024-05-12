@@ -247,9 +247,7 @@ form.formatPriceField = (field) => {
     throw new Error("Form Format Price Field: Missing field argument.")
   }
 
-  if (field.form.id !== "edit_product") {
-    field.value = form.initialPrice
-  }
+  field.value = field.form.id !== "edit_product" ? form.initialPrice : `$ ${field.value}`
 
   field.addEventListener("input", (e) => {
     const value = e.target.value

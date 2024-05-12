@@ -16,6 +16,7 @@
   <summary><b>Table of Contents</b></summary>
   <ol>
     <li><a href="#about">About</a></li>
+    <li><a href="#usage">Usage</a></li>
     <li><a href="#built-with">Built with</a></li>
     <li><a href="#demo">Demo</a></li>
     <li><a href="#developers">Developers</a></li>
@@ -26,10 +27,22 @@
 ## About
 AluraGeek is a fictional online store with a variety of merchandise inspired by pop culture, including sci-fi, fantasy, gaming, and more items.
 
+## Usage
+In order to access admin features, which includes the ability to add, edit, or delete products, you are required to log in. Please, use the following credentials:
+**Email:**
+```
+  admin@alurageek.com
+```
+**Password:**
+```
+  123456
+```
+
 ## Built with
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![Unsplash](https://img.shields.io/badge/unsplash-000000?style=for-the-badge&logo=unsplash&logoColor=white)
 ![Github Pages](https://img.shields.io/badge/github%20pages-121013?style=for-the-badge&logo=github&logoColor=white)
 
 ## Demo

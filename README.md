@@ -29,6 +29,7 @@ AluraGeek is a fictional online store with a variety of merchandise inspired by 
 
 ## Usage
 In order to access admin features, which includes the ability to add, edit, or delete products, you are required to log in. Please, use the following credentials:
+<br>
 **Email:**
 ```
   admin@alurageek.com

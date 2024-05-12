@@ -2,7 +2,7 @@ import setPageTitle from "./setPageTitle.js"
 import form from "./form.js"
 
 const products = {
-  key: "products",
+  key: "alurageek_products",
   container: document.querySelector("main"),
   placeholderImage: "src/assets/img/placeholder.svg",
   renderFallbackMessage: undefined,
@@ -49,21 +49,17 @@ products.get = () => {
 
   if (!productsData) {
     fetch("products.json")
-      .then(res => res.json())
-      .then(list => localStorage.setItem(products.key, JSON.stringify(list)))
+      .then(res => res.ok ? res.json() : products.renderFallbackMessage("Failed to get posts list. Please, try again later."))
+      .then(list => {
+        localStorage.setItem(products.key, JSON.stringify(list))
+        window.location.reload()
+      })
       .catch(() => products.renderFallbackMessage("Failed to get posts list. Please, try again later."))
-  }
-
-  const list = JSON.parse(productsData)
-
-  if (!list) {
-    products.renderFallbackMessage("Failed to get posts list. Please, try again later.")
     return
   }
-  
+
   /* Newest products first */
-  list.sort((a, b) => Number(b.id) - Number(a.id))
-  products.list = list
+  products.list = JSON.parse(productsData).sort((a, b) => Number(b.id) - Number(a.id))
 }
 
 products.get()
@@ -245,26 +241,19 @@ products.renderProductDetailsAndSuggestions = () => {
     `)
 
     /* Getting similar products from same category as detailed product */
-    for (const product of products.byCategory[detailedProduct.category]) {
-      const i = products.byCategory[detailedProduct.category].indexOf(product)
-  
-      if (product !== detailedProduct && i <= products.maxPerRow) {
+    for (const [i, product] of products.byCategory[detailedProduct.category].entries()) {
+      if (product !== detailedProduct && i < products.maxPerRow) {
         similarProducts.push(product)
       }
     }
   }
 
   /* Adding more similar products from any categories until row is filled */
-  const isRowNotFilled = similarProducts.length < products.maxPerRow
-  const quantityToFillRow = products.maxPerRow - similarProducts.length
-
-  if (isRowNotFilled) {
-    for (const product of products.list) {
-      const i = products.list.indexOf(product)
-
-      if (product.category !== detailedProduct.category && i < quantityToFillRow) {
-        similarProducts.push(product)
-      }
+  for (let i = 0; i < products.list.length && similarProducts.length < products.maxPerRow; i++) {
+    const product = products.list[i]
+  
+    if (product.category !== detailedProduct.category) {
+      similarProducts.push(product)
     }
   }
 

@@ -1,5 +1,5 @@
 const isLoginPage = window.location.pathname.includes("login")
-const isLogged = !!localStorage.getItem("logged")
+const isLogged = !!localStorage.getItem("alurageek_logged")
 const isPrivatePage = !isLoginPage && !isLogged
 
 if (isPrivatePage) {

@@ -1,5 +1,5 @@
 const session = {
-  key: "logged",
+  key: "alurageek_logged",
   login: undefined,
   logout: undefined,
   isLogged: undefined

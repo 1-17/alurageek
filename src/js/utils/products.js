@@ -251,8 +251,12 @@ products.renderProductDetailsAndSuggestions = () => {
   /* Adding more similar products from any categories until row is filled */
   for (let i = 0; i < products.list.length && similarProducts.length < products.maxPerRow; i++) {
     const product = products.list[i]
-  
-    if (product.category !== detailedProduct.category) {
+    
+    if (detailedProduct && product.category !== detailedProduct.category) {
+      similarProducts.push(product)
+    }
+
+    if (!detailedProduct) {
       similarProducts.push(product)
     }
   }
